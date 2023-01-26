@@ -16,12 +16,13 @@
         {
             "matches": [
                 "http://127.0.0.1:5500/*",
-                "https://www.linkedin.com/jobs/search/*",
+                "https://www.linkedin.com/jobs/*",
                 "https://www.linkedin.com/jobs/collections/*"
             ],
             "js": [
                 "script.js"
-            ]
+            ],
+            "run_at": "document_end"
         }
     ]
 }
