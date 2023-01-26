@@ -17,7 +17,7 @@ select {
     background-color: rgb(0, 157, 255);
     color: white;
     margin: 5px;
-    z-index: 100;
+    z-index: 20000;
     padding: 3px 7px;
     border-radius: 2px;
 }
