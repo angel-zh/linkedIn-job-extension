@@ -1,25 +1,41 @@
 let userToken = ""
 
-chrome.runtime.onMessage.addListener(message => {
-    userToken = message.userToken
-    console.log(userToken)
-    //use receivedParameter as you wish.
-})
+// chrome.runtime.onMessage.addListener(message => {
+//     userToken = message.userToken
+//     console.log(userToken)
+//     //use receivedParameter as you wish.
+// })
+window.addEventListener ("load", runChecks, false);
 
-const topCard = document.querySelector('.jobs-unified-top-card__content--two-pane')
-const buttonsContainer = topCard.querySelector('.display-flex')
-const addButton = document.createElement('button')
+function runChecks (evt) {
+    let timer = setInterval (checkForButton, 200);
 
-addButton.setAttribute('class', 'artdeco-button artdeco-button--3 artdeco-button--secondary add-button')
-addButton.innerText = '+ Add'
-addButton.style.marginLeft = '9px'
-buttonsContainer.appendChild(addButton)
+    function checkForButton () {
+        if (document.querySelector('.jobs-unified-top-card__content--two-pane')) {
+            console.log('done loading')
+            clearInterval (timer);
+            afterDOMLoaded()
+        }
+    }
+}
+
+function afterDOMLoaded(){
+    const topCard = document.querySelector('.jobs-unified-top-card__content--two-pane')
+    const buttonsContainer = topCard.querySelector('.display-flex')
+    const addButton = document.createElement('button')
+
+    addButton.setAttribute('class', 'artdeco-button artdeco-button--3 artdeco-button--secondary add-button')
+    addButton.innerText = '+ Add'
+    addButton.style.marginLeft = '9px'
+    buttonsContainer.appendChild(addButton)
 
 
-addButton.addEventListener('click', () => {
-    perform()
-    alert('Clicked!')
-})
+    addButton.addEventListener('click', () => {
+        perform()
+        alert('Clicked!')
+    })
+}
+
 
 // var s = document.createElement('script')
 // s.src = chrome.runtime.getURL('script.js')
