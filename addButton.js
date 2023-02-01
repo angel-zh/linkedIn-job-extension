@@ -1,25 +1,28 @@
 let userToken = ""
 
-// chrome.runtime.onMessage.addListener(message => {
-//     userToken = message.userToken
-//     console.log(userToken)
-//     //use receivedParameter as you wish.
-// })
-window.addEventListener ("load", runChecks, false);
+chrome.runtime.onMessage.addListener(
+    function (request, sender, sendResponse) {
+        // listen for messages sent from background.js
+        if (request.message === 'hello!') {
+            console.log(request.url) // new url is now in content scripts!
+        }
+    });
 
-function runChecks (evt) {
-    let timer = setInterval (checkForButton, 200);
+window.addEventListener("load", runChecks, false);
 
-    function checkForButton () {
+function runChecks(evt) {
+    let timer = setInterval(checkForButton, 200);
+
+    function checkForButton() {
         if (document.querySelector('.jobs-unified-top-card__content--two-pane')) {
             console.log('done loading')
-            clearInterval (timer);
+            clearInterval(timer);
             afterDOMLoaded()
         }
     }
 }
 
-function afterDOMLoaded(){
+function afterDOMLoaded() {
     const topCard = document.querySelector('.jobs-unified-top-card__content--two-pane')
     const buttonsContainer = topCard.querySelector('.display-flex')
     const addButton = document.createElement('button')
@@ -35,17 +38,6 @@ function afterDOMLoaded(){
         alert('Clicked!')
     })
 }
-
-
-// var s = document.createElement('script')
-// s.src = chrome.runtime.getURL('script.js')
-// s.onload = function () {
-//     this.remove()
-// }
-//     (document.head || document.documentElement).appendChild(s);
-
-
-
 
 async function perform() {
     // PUT request -
@@ -67,29 +59,6 @@ async function perform() {
         .catch(err => console.log(err));
 }
 
-// chrome.identity.getAuthToken({ interactive: true }, function (token) {
-//     console.log('got the token', token);
-//     userToken = token
-//     perform()
-// })
 
-
-
-// WORKAROUND FOR COLLECTIONS PAGE
-// window.addEventListener("load", function load(event){
-//     this.window.removeEventListener("load", load, false)
-//     const topCard = document.querySelector('.jobs-unified-top-card__content--two-pane')
-//     const buttonsContainer = topCard.querySelector('.display-flex')
-//     const addButton = document.createElement('button')
-
-//     addButton.setAttribute('class', 'artdeco-button artdeco-button--3 artdeco-button--secondary add-button')
-//     addButton.innerText = '+ Add'
-//     addButton.style.marginLeft = '9px'
-//     addButton.addEventListener('click', () => {
-//         alert('Clicked!')
-//     })
-//     // topCard.appendChild(addButton)
-//     buttonsContainer.appendChild(addButton)
-// }, false)
 
 
