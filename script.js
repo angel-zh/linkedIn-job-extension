@@ -15,8 +15,6 @@ logIn.addEventListener('click', () => {
     chrome.identity.getAuthToken({ interactive: true }, function (token) {
       console.log('got the token', token);
       userToken = token
-      // window.localStorage.setItem('userToken', userToken)
-      // perform()
     })
 })
 
@@ -45,5 +43,3 @@ chrome.tabs.executeScript(tabs[0].id, {
 }, function() {
   chrome.tabs.sendMessage(tabs[0].id, {userToken: userToken});
 })
-
-// export { userToken, perform }
