@@ -1,11 +1,19 @@
 
-const saveButton = document.getElementById('save-btn')
-saveButton.addEventListener('click', event => {
-    event.preventDefault()
-    const column1 = document.getElementById('col-1').value
-    const column2 = document.getElementById('col-2').value
-    const column3 = document.getElementById('col-3').value
-    const column4 = document.getElementById('col-4').value
-    const column5 = document.getElementById('col-5').value
-    const column6 = document.getElementById('col-6').value
+let userToken = ""
+
+const logOut = document.getElementById('log-out')
+const logIn = document.getElementById('log-in')
+logOut.addEventListener('click', () => {
+  console.log(userToken)
+  window.fetch(`https://accounts.google.com/o/oauth2/revoke?token=${userToken}`)
+    .then(response => response.json())
+    .then(data => console.log(data))
 })
+
+
+logIn.addEventListener('click', () => {
+  chrome.runtime.sendMessage({ text: "Login Request from popup.js" }, function (response) {
+    console.log("Response: ", response)
+  })
+})
+
