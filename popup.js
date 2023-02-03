@@ -17,8 +17,30 @@ logIn.addEventListener('click', () => {
   })
 })
 
+const customColumns = document.querySelector('.custom-columns')
+let counter = 1
+function addColumn() {
+  const input = document.createElement('input')
+  const removeButton = document.createElement('button')
+  input.setAttribute('type', 'text')
+  input.setAttribute('class', `custom-${counter}`)
+  input.classList.add('col')
+  input.placeholder = 'Enter Column Title'
+  removeButton.innerText = '-'
+  removeButton.setAttribute('class', `custom-${counter}`)
+  customColumns.appendChild(input)
+  customColumns.appendChild(removeButton)
+  counter += 1
+}
 
-const saveButton = document.getElementById('save-btn')
+
+
+const addColumnButton = document.getElementById('add-column-btn')
+
+addColumnButton.addEventListener('click', event => {
+  event.preventDefault()
+  addColumn()
+})
 
 function storeFormData() {
   const columnTitle1 = document.getElementById('col-1').value
@@ -34,6 +56,8 @@ function storeFormData() {
   const columnTitle6 = document.getElementById('col-6').value
   localStorage.setItem('column6', columnTitle6)
 }
+
+const saveButton = document.getElementById('save-btn')
 
 saveButton.addEventListener('click', event => {
   event.preventDefault()
