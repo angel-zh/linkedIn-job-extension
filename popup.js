@@ -46,11 +46,6 @@ addColumnButton.addEventListener('click', event => {
   addColumn()
 })
 
-// removeButton.addEventListener('click', event => {
-//   event.preventDefault()
-//   removeColumn(event.parentNode.id)
-// })
-
 function storeFormData() {
   const columnTitle1 = document.getElementById('col-1').value
   localStorage.setItem('column1', columnTitle1)
