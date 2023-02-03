@@ -16,7 +16,7 @@
         <fieldset>
             <legend>Custom Spreadsheet</legend>
             <label for="col-1">Column 1: </label>
-            <select name="'col-1" id="col-1">
+            <select name="col-1" id="col-1" class="col">
                 <option value="" disabled selected hidden>Select Col Title</option>
                 <option value="title">Job Title</option>
                 <option value="company">Company</option>
@@ -26,7 +26,7 @@
                 <option value="link">Link</option>
             </select><br>
             <label for="col-2">Column 2: </label>
-            <select name="'col-2" id="col-2">
+            <select name="'col-2" id="col-2" class="col">
                 <option value="" disabled selected hidden>Select Col Title</option>
                 <option value="title">Job Title</option>
                 <option value="company">Company</option>
@@ -36,7 +36,7 @@
                 <option value="link">Link</option>
             </select><br>
             <label for="col-3">Column 3: </label>
-            <select name="'col-3" id="col-3">
+            <select name="'col-3" id="col-3" class="col">
                 <option value="" disabled selected hidden>Select Col Title</option>
                 <option value="title">Job Title</option>
                 <option value="company">Company</option>
@@ -46,7 +46,7 @@
                 <option value="link">Link</option>
             </select><br>
             <label for="col-4">Column 4: </label>
-            <select name="'col-4" id="col-4">
+            <select name="'col-4" id="col-4" class="col">
                 <option value="" disabled selected hidden>Select Col Title</option>
                 <option value="title">Job Title</option>
                 <option value="company">Company</option>
@@ -56,7 +56,7 @@
                 <option value="link">Link</option>
             </select><br>
             <label for="col-5">Column 5: </label>
-            <select name="'col-5" id="col-5">
+            <select name="'col-5" id="col-5" class="col">
                 <option value="" disabled selected hidden>Select Col Title</option>
                 <option value="title">Job Title</option>
                 <option value="company">Company</option>
@@ -66,7 +66,7 @@
                 <option value="link">Link</option>
             </select><br>
             <label for="col-6">Column 6: </label>
-            <select name="'col-6" id="col-6">
+            <select name="'col-6" id="col-6" class="col">
                 <option value="" disabled selected hidden>Select Col Title</option>
                 <option value="title">Job Title</option>
                 <option value="company">Company</option>
@@ -75,12 +75,14 @@
                 <option value="source">Source</option>
                 <option value="link">Link</option>
             </select><br>
+            <div class="custom-columns">
+            </div>
+            <button id="add-column-btn">+ Column</button>
             <input id='save-btn' type="submit" value="Save">
         </fieldset>
     </form>
 
     <script src='popup.js'></script>
-    
     <!-- <script src="https://apis.google.com/js/api.js"></script> -->
     <!-- <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script> -->
 </body>
