@@ -14,7 +14,7 @@ chrome.runtime.onMessage.addListener(
         console.log("Received %o from %o, frame", msg, sender.tab, sender.frameId)
         chrome.identity.getAuthToken({ interactive: true }, function (token) {
             console.log('got the token', token)
-            sendResponse(`Gotcha! Here is the Token: ${token}`)
+            sendResponse(`Response from background.js: ${token}`)
         })
         // As per this stackoverflow thread - https://stackoverflow.com/questions/20077487/chrome-extension-message-passing-response-not-sent
         // return true is needed to indicate that you'll call the response asynchronously
