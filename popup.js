@@ -22,18 +22,22 @@ let counter = 1
 function addColumn() {
   const input = document.createElement('input')
   const removeButton = document.createElement('button')
+  const span = document.createElement('span')
   input.setAttribute('type', 'text')
-  input.setAttribute('class', `custom-${counter}`)
   input.classList.add('col')
   input.placeholder = 'Enter Column Title'
   removeButton.innerText = '-'
-  removeButton.setAttribute('class', `custom-${counter}`)
-  customColumns.appendChild(input)
-  customColumns.appendChild(removeButton)
+  removeButton.onclick = removeColumn
+  span.setAttribute('id', `custom-${counter}`)
+  span.appendChild(input)
+  span.appendChild(removeButton)
+  customColumns.appendChild(span)
   counter += 1
 }
 
-
+function removeColumn() {
+  this.parentElement.remove()
+}
 
 const addColumnButton = document.getElementById('add-column-btn')
 
@@ -41,6 +45,11 @@ addColumnButton.addEventListener('click', event => {
   event.preventDefault()
   addColumn()
 })
+
+// removeButton.addEventListener('click', event => {
+//   event.preventDefault()
+//   removeColumn(event.parentNode.id)
+// })
 
 function storeFormData() {
   const columnTitle1 = document.getElementById('col-1').value
