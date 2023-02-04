@@ -1,42 +1,33 @@
 let userToken = ""
 
-chrome.runtime.onMessage.addListener(
-    function (request, sender, sendResponse) {
-        // listen for messages sent from background.js
-        if (request.message === 'hello!') {
-            console.log(request.url) // new url is now in content scripts!
-        }
-    });
+// chrome.runtime.onMessage.addListener(
+//     function (request, sender, sendResponse) {
+//         // listen for messages sent from background.js
+//         if (request.message === 'hello!') {
+//             console.log(request.url) // new url is now in content scripts!
+//             runChecks()
+//         }
+//     })
 
-window.addEventListener("load", runChecks, false);
+window.addEventListener("load", runChecks, false)
 
 function runChecks(evt) {
-    let timer = setInterval(checkForButton, 200);
+    let timer = setInterval(checkForButton, 200)
 
     function checkForButton() {
         if (document.querySelector('.jobs-unified-top-card__content--two-pane')) {
             console.log('done loading')
-            clearInterval(timer);
+            clearInterval(timer)
             afterDOMLoaded()
         }
     }
 }
 
-function afterDOMLoaded() {
-    const topCard = document.querySelector('.jobs-unified-top-card__content--two-pane')
-    const buttonsContainer = topCard.querySelector('.display-flex')
-    const addButton = document.createElement('button')
-
-    addButton.setAttribute('class', 'artdeco-button artdeco-button--3 artdeco-button--secondary add-button')
-    addButton.innerText = '+ Add'
-    addButton.style.marginLeft = '9px'
-    buttonsContainer.appendChild(addButton)
-
-
-    addButton.addEventListener('click', () => {
-        perform()
-        alert('Clicked!')
-    })
+function getUserToken() {
+    chrome.runtime.sendMessage({ text: "Token Request from addButton.js" }, function (response) {
+        console.log("Response: ", response)
+        userToken = response.substring(response.indexOf(':') + 2)
+      })
 }
 
 async function perform() {
@@ -56,8 +47,27 @@ async function perform() {
     })
         .then(res => res.json())
         .then(res => console.log(res))
-        .catch(err => console.log(err));
+        .catch(err => console.log(err))
 }
+
+function afterDOMLoaded() {
+    const topCard = document.querySelector('.jobs-unified-top-card__content--two-pane')
+    const buttonsContainer = topCard.querySelector('.display-flex')
+    const addButton = document.createElement('button')
+
+    addButton.setAttribute('class', 'artdeco-button artdeco-button--3 artdeco-button--secondary add-button')
+    addButton.innerText = '+ Add'
+    addButton.style.marginLeft = '9px'
+    buttonsContainer.appendChild(addButton)
+
+    addButton.addEventListener('click', () => {
+        getUserToken()
+        // perform()
+    })
+}
+
+
+
 
 
 
