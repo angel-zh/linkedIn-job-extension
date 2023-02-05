@@ -23,11 +23,13 @@ function runChecks(evt) {
     }
 }
 
+
 function getUserToken() {
     chrome.runtime.sendMessage({ text: "Token Request from addButton.js" }, function (response) {
         console.log("Response: ", response)
         userToken = response.substring(response.indexOf(':') + 2)
-      })
+        perform()
+    })
 }
 
 async function perform() {
@@ -35,8 +37,8 @@ async function perform() {
     // const url = 'https://sheets.googleapis.com/v4/spreadsheets/1OOkUXS1hRShfFReqizv0gvmTTvVdIpwrGCHPpCOsDuQ/values/A1?valueInputOption=USER_ENTERED';
 
     // POST request -
-    const url = 'https://sheets.googleapis.com/v4/spreadsheets/1OOkUXS1hRShfFReqizv0gvmTTvVdIpwrGCHPpCOsDuQ/values/Jobs!A1:append?valueInputOption=USER_ENTERED';
-
+    const url = 'https://sheets.googleapis.com/v4/spreadsheets/1OOkUXS1hRShfFReqizv0gvmTTvVdIpwrGCHPpCOsDuQ/values/Jobs!A1:append?valueInputOption=USER_ENTERED'
+    console.log('token is =>',userToken)
     fetch(url, {
         method: "POST",
         headers: {
@@ -62,7 +64,6 @@ function afterDOMLoaded() {
 
     addButton.addEventListener('click', () => {
         getUserToken()
-        // perform()
     })
 }
 
