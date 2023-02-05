@@ -40,25 +40,58 @@ function getCompany() {
     return document.querySelector('.jobs-unified-top-card__company-name > a').innerText
 }
 
+function getLocation() {
+    const location = document.querySelector('.jobs-unified-top-card__bullet').innerText
+    const type =
+        document.querySelector('.jobs-unified-top-card__workplace-type')
+            ? document.querySelector('.jobs-unified-top-card__workplace-type').innerText
+            : ''
+    return `${location} ${type}`
+}
+
+function getToday() {
+    const today = new Date()
+    const dd = today.getDate().toString().padStart(2, '0')
+    const mm = (today.getMonth() + 1).toString().padStart(2, '0')
+    const yyyy = today.getFullYear()
+    return `${mm}/${dd}/${yyyy}`
+}
+
 async function perform() {
     // PUT request -
     // const url = 'https://sheets.googleapis.com/v4/spreadsheets/1OOkUXS1hRShfFReqizv0gvmTTvVdIpwrGCHPpCOsDuQ/values/A1?valueInputOption=USER_ENTERED';
-    chrome.storage.sync.get(['formObj']).then((t)=> {
-        if (Object.keys(t).length !== 0) {
+    chrome.storage.sync.get(['formObj']).then(e => {
+        if (Object.keys(e).length !== 0) {
             // POST request -
             const url = 'https://sheets.googleapis.com/v4/spreadsheets/1OOkUXS1hRShfFReqizv0gvmTTvVdIpwrGCHPpCOsDuQ/values/Jobs!A1:append?valueInputOption=USER_ENTERED'
-            console.log('values are =>',Object.values(t.formObj))
+            console.log('values are =>', Object.values(e.formObj))
             const values = Object.values(t.formObj)
-            const mappedValues = values.map((field) => {
-                if(field === 'Job Title') {
-                    return getTitle()
-                } else if (field === 'Company') {
-                    return getCompany()
-                } else {
-                    return 'nothing'
+            const mappedValues = values.map(field => {
+                switch (field) {
+                    case 'Job Title':
+                        return getTitle()
+                    case 'Company':
+                        return getCompany()
+                    case 'Location':
+                        return getLocation()
+                    case 'Date Applied':
+                        return getToday()
+                    case 'Link':
+                        return getUrl()
+                    default: 
+                        return 'nothing'
                 }
+                // if (field === 'Job Title') {
+                //     return getTitle()
+                // } else if (field === 'Company') {
+                //     return getCompany()
+                // } else if (field === 'Location') {
+                //     return getLocation()
+                // } else {
+                //     return 'nothing'
+                // }
             })
-            console.log('mappedvalues=',mappedValues)
+            console.log('mappedvalues=', mappedValues)
             fetch(url, {
                 method: "POST",
                 headers: {
@@ -71,7 +104,7 @@ async function perform() {
                 .then(res => console.log(res))
                 .catch(err => console.log(err))
         }
-      })
+    })
 }
 
 function afterDOMLoaded() {
