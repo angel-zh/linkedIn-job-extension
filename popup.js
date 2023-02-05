@@ -1,3 +1,14 @@
+chrome.storage.sync.get(['formObj']).then((e)=> {
+  if (Object.keys(e).length !== 0) {
+    console.log(e.formObj)
+    const keys = Object.keys(e.formObj)
+    keys.forEach((element) => {
+      const column = document.getElementById(`${element}`)
+      column.value = e.formObj[element]
+    })
+  }
+})
+
 const logIn = document.getElementById('log-in')
 const logOut = document.getElementById('log-out')
 const customColumns = document.querySelector('.custom-columns')
@@ -71,3 +82,5 @@ saveButton.addEventListener('click', event => {
   event.preventDefault()
   storeFormData()
 })
+
+
