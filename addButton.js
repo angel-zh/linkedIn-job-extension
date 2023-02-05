@@ -32,24 +32,46 @@ function getUserToken() {
     })
 }
 
+function getTitle() {
+    return document.getElementsByClassName('jobs-unified-top-card__job-title')[0].innerText
+}
+
+function getCompany() {
+    return document.querySelector('.jobs-unified-top-card__company-name > a').innerText
+}
+
 async function perform() {
     // PUT request -
     // const url = 'https://sheets.googleapis.com/v4/spreadsheets/1OOkUXS1hRShfFReqizv0gvmTTvVdIpwrGCHPpCOsDuQ/values/A1?valueInputOption=USER_ENTERED';
-
-    // POST request -
-    const url = 'https://sheets.googleapis.com/v4/spreadsheets/1OOkUXS1hRShfFReqizv0gvmTTvVdIpwrGCHPpCOsDuQ/values/Jobs!A1:append?valueInputOption=USER_ENTERED'
-    console.log('token is =>',userToken)
-    fetch(url, {
-        method: "POST",
-        headers: {
-            "Authorization": "Bearer " + userToken,
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ "values": [["test", "Test2"]] })
-    })
-        .then(res => res.json())
-        .then(res => console.log(res))
-        .catch(err => console.log(err))
+    chrome.storage.sync.get(['formObj']).then((t)=> {
+        if (Object.keys(t).length !== 0) {
+            // POST request -
+            const url = 'https://sheets.googleapis.com/v4/spreadsheets/1OOkUXS1hRShfFReqizv0gvmTTvVdIpwrGCHPpCOsDuQ/values/Jobs!A1:append?valueInputOption=USER_ENTERED'
+            console.log('values are =>',Object.values(t.formObj))
+            const values = Object.values(t.formObj)
+            const mappedValues = values.map((field) => {
+                if(field === 'Job Title') {
+                    return getTitle()
+                } else if (field === 'Company') {
+                    return getCompany()
+                } else {
+                    return 'nothing'
+                }
+            })
+            console.log('mappedvalues=',mappedValues)
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer " + userToken,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ "values": [mappedValues] })
+            })
+                .then(res => res.json())
+                .then(res => console.log(res))
+                .catch(err => console.log(err))
+        }
+      })
 }
 
 function afterDOMLoaded() {
