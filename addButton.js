@@ -23,7 +23,6 @@ function runChecks(evt) {
     }
 }
 
-
 function getUserToken() {
     chrome.runtime.sendMessage({ text: "Token Request from addButton.js" }, function (response) {
         console.log("Response: ", response)
@@ -46,7 +45,7 @@ function getLocation() {
         document.querySelector('.jobs-unified-top-card__workplace-type')
             ? document.querySelector('.jobs-unified-top-card__workplace-type').innerText
             : ''
-    return `${location} ${type}`
+    return `${location}(${type})`.trim()
 }
 
 function getToday() {
@@ -57,15 +56,21 @@ function getToday() {
     return `${mm}/${dd}/${yyyy}`
 }
 
+function getUrl() {
+    const url = window.location.href
+    const jobId = url.split('?')[1].split('=')[1].split('&')[0]
+    return `https://www.linkedin.com/jobs/view/${jobId}`
+}
+
 async function perform() {
     // PUT request -
     // const url = 'https://sheets.googleapis.com/v4/spreadsheets/1OOkUXS1hRShfFReqizv0gvmTTvVdIpwrGCHPpCOsDuQ/values/A1?valueInputOption=USER_ENTERED';
     chrome.storage.sync.get(['formObj']).then(e => {
         if (Object.keys(e).length !== 0) {
             // POST request -
-            const url = 'https://sheets.googleapis.com/v4/spreadsheets/1OOkUXS1hRShfFReqizv0gvmTTvVdIpwrGCHPpCOsDuQ/values/Jobs!A1:append?valueInputOption=USER_ENTERED'
+            const spreadsheetUrl = 'https://sheets.googleapis.com/v4/spreadsheets/1OOkUXS1hRShfFReqizv0gvmTTvVdIpwrGCHPpCOsDuQ/values/Jobs!A1:append?valueInputOption=USER_ENTERED'
             console.log('values are =>', Object.values(e.formObj))
-            const values = Object.values(t.formObj)
+            const values = Object.values(e.formObj)
             const mappedValues = values.map(field => {
                 switch (field) {
                     case 'Job Title':
@@ -78,21 +83,12 @@ async function perform() {
                         return getToday()
                     case 'Link':
                         return getUrl()
-                    default: 
-                        return 'nothing'
+                    default:
+                        return 'empty'
                 }
-                // if (field === 'Job Title') {
-                //     return getTitle()
-                // } else if (field === 'Company') {
-                //     return getCompany()
-                // } else if (field === 'Location') {
-                //     return getLocation()
-                // } else {
-                //     return 'nothing'
-                // }
             })
             console.log('mappedvalues=', mappedValues)
-            fetch(url, {
+            fetch(spreadsheetUrl, {
                 method: "POST",
                 headers: {
                     "Authorization": "Bearer " + userToken,
