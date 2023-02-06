@@ -10,51 +10,41 @@
 </head>
 
 <body>
-    <button id="log-in">Log In</button>
-    <button id="log-out">Log Out</button>
-    <div>
-        <!-- <div class="spreadsheet-tip">
-            <p><span class="highlight">Spreadsheet ID</span> can be found in the URL. Example -
-                https://docs.google.com/spreadsheets/d/<span id="spreadsheet-id-ex">1OOkUXS1cRSxfFReqizv7gvmTTvVeIpwrGCHdpCOsDaQ</span>/edit#gid=0
-            </p>
-            <p>
-                <span class="highlight">Sheet Name</span> can be found at the bottom tab of the spreadsheet.
-            </p>
-        </div> -->
-        <form id="spreadsheet-creds-form">
-            <label for="spreadsheet-id">
-                Enter your Google spreadsheet ID
-                <div class="tooltip">ⓘ
-                    <span class="tooltiptext">
-                        <p><span class="highlight">Spreadsheet ID</span> can be found in the URL. <br>Example -
-                            https://docs.google.com/spreadsheets/d/<span
-                                id="spreadsheet-id-ex">1OOkUXS1cRSxfFReqizv7gvmTTvVeIpwrGCHdpCOsDaQ</span>/edit#gid=0
-                        </p>
-                    </span>
-                </div>:
-            </label>
-            <input type="text" name="spreadsheet-id" id="spreadsheet-id" placeholder="Spreadsheet ID" required><br>
-            <label for="sheet-name">
-                Enter the sheet name
-                <div class="tooltip">ⓘ
-                    <span class="tooltiptext">
-                        <p>
-                            <span class="highlight">Sheet Name</span> can be found at the bottom tab of the spreadsheet.
-                        </p>
-                    </span>
-                </div>:
-            </label>
-            <input type="text" name="sheet-name" id="sheet-name" placeholder="Eg. Sheet1" required>
-            <input id="submit-btn" type="submit" value="Submit">
-        </form>
-        <a href="https://docs.google.com/spreadsheets/create" id="create-sheet" target="_blank">
-            or create new spreadsheet
-        </a>
+    <button id="log-in" class="button">Log In</button>
+    <button id="log-out" class="button">Log Out</button>
+    <form id="spreadsheet-creds-form">
+        <label for="spreadsheet-id">
+            Enter your Google spreadsheet ID
+            <div class="tooltip">ⓘ
+                <span class="tooltiptext">
+                    <p><span class="highlight">Spreadsheet ID</span> can be found in the URL. <br>Example -
+                        https://docs.google.com/spreadsheets/d/<span
+                            id="spreadsheet-id-ex">1OOkUXS1cRSxfFReqizv7gvmTTvVeIpwrGCHdpCOsDaQ</span>/edit#gid=0
+                    </p>
+                </span>
+            </div>:
+        </label>
+        <input type="text" name="spreadsheet-id" id="spreadsheet-id" placeholder="Spreadsheet ID" required><br>
+        <label for="sheet-name">
+            Enter the sheet name
+            <div class="tooltip">ⓘ
+                <span class="tooltiptext">
+                    <p>
+                        <span class="highlight">Sheet Name</span> can be found at the bottom tab of the spreadsheet.
+                    </p>
+                </span>
+            </div>:
+        </label>
+        <input type="text" name="sheet-name" id="sheet-name" placeholder="Eg. Sheet1" required>
+        <input id="submit-btn" type="submit" value="Submit" class="button">
+    </form>
+    <a href="https://docs.google.com/spreadsheets/create" id="create-sheet-link" target="_blank">
+        or create new spreadsheet
+    </a>
 
-    </div>
     <form id="form">
         <fieldset>
-            <legend>Custom Spreadsheet</legend>
+            <legend>Custom Spreadsheet Columns</legend>
             <label for="col-1">Column 1: </label>
             <select name="col-1" id="col-1" class="col">
                 <option value="" class="placeholder" selected>Select Col Title</option>
@@ -102,8 +92,8 @@
             </select><br>
             <div class="custom-columns">
             </div>
-            <button id="add-column-btn">+ Column</button>
-            <input id='save-btn' type="submit" value="Save">
+            <button id="add-column-btn" class="button">+ Column</button>
+            <input id='save-btn' type="submit" value="Save" class="button">
         </fieldset>
     </form>
 
