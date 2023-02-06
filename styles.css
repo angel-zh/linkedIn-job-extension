@@ -4,11 +4,6 @@ body {
     height: auto;
 }
 
-.spreadsheet-tip {
-    border: 1px solid grey;
-    text-align: start;
-}
-
 #spreadsheet-id-ex {
     font-weight: bold;
     color: #4545a1;
@@ -54,16 +49,51 @@ body {
     overflow-wrap: break-word;
 }
 
-#create-sheet {
-    margin-bottom: 15px;
+#create-sheet-link {
+    font-size: 0.75rem;
+    text-decoration: none;
+    color: #21a15d;
 }
 
-select {
+#create-sheet-link:hover {
+    text-decoration: underline;
+    color: #1a8b4f;
+}
+
+#form {
+    margin-top: 15px;
+}
+
+fieldset {
+    background-color: white;
+    color: #0d5bba;
+    border: 1px solid #0d5bba;
+}
+
+.col {
     margin-top: 10px;
 }
 
-#submit-btn, #save-btn {
+.button {
+    border: 1px solid #0d5bba;
+    border-radius: 13px;
+    padding: 5px 10px;
+    color: #0d5bba;
+    background-color: white;
     margin-top: 10px;
+}
+
+#submit-btn,
+#save-btn {
+    background-color: #0d5bba;
+    color: white;
+}
+
+.button:hover {
+    background-color: #e7f2ff;
+}
+#submit-btn:hover, #save-btn:hover {
+    background-color: #044593;
 }
 
 .hide {
