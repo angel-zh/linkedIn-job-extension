@@ -1,4 +1,4 @@
-
+// Retrieve saved data from chrome.storage and populate form inputs
 function populateInput(data) {
   chrome.storage.sync.get([data]).then(e => {
     if (Object.keys(e).length !== 0) {
@@ -64,8 +64,16 @@ function removeColumn() {
   this.parentElement.remove()
 }
 
-function displaySuccessMsg() {
+function displaySuccessMsg(str) {
+  const p = document.createElement('p')
+  p.innerText = 'Success!'
+  p.setAttribute('class', 'highlight')
 
+  str === 'stored creds'
+    ?
+    document.getElementById('spreadsheet-creds-form').appendChild(p)
+    :
+    document.getElementById('fieldset').appendChild(p)
 }
 
 // Store user's speadsheet credentials (id and sheet name) as obj in chrome.storage
@@ -75,6 +83,7 @@ function storeSpreadsheetCreds() {
   const credsObj = Object.fromEntries(credsData)
   chrome.storage.sync.set({ 'credsObj': credsObj }).then(() => {
     console.log('stored creds')
+    displaySuccessMsg('stored creds')
   })
 }
 
@@ -85,6 +94,7 @@ function storeFormData() {
   const formObj = Object.fromEntries(formData)
   chrome.storage.sync.set({ 'formObj': formObj }).then(() => {
     console.log('stored form')
+    displaySuccessMsg('stored form')
   })
   // get result
   //
