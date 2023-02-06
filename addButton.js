@@ -31,7 +31,7 @@ function getUserToken() {
     })
 }
 
-function getTitle() {
+function getJobTitle() {
     return document.getElementsByClassName('jobs-unified-top-card__job-title')[0].innerText
 }
 
@@ -74,7 +74,7 @@ async function perform() {
             const mappedValues = values.map(field => {
                 switch (field) {
                     case 'Job Title':
-                        return getTitle()
+                        return getJobTitle()
                     case 'Company':
                         return getCompany()
                     case 'Location':
