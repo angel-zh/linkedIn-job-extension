@@ -1,7 +1,23 @@
 body {
     text-align: center;
-    width: 250px;
+    width: 300px;
     height: auto;
+}
+
+.spreadsheet-tip {
+    border: 1px solid grey;
+    word-wrap: break-word;
+    text-align: start;
+    font-size: 0.9rem;
+}
+
+#spreadsheet-id-ex {
+    font-weight: bold;
+    color: rgb(69, 69, 161);
+}
+
+#spreadsheet-id, #sheet-name {
+    width: 250px;
 }
 
 select {
