@@ -6,25 +6,63 @@ body {
 
 .spreadsheet-tip {
     border: 1px solid grey;
-    word-wrap: break-word;
     text-align: start;
-    font-size: 0.9rem;
 }
 
 #spreadsheet-id-ex {
     font-weight: bold;
-    color: rgb(69, 69, 161);
+    color: #4545a1;
 }
 
-#spreadsheet-id, #sheet-name {
+#spreadsheet-id,
+#sheet-name {
     width: 250px;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 250px;
+    font-size: 12px;
+    background-color: #555;
+    color: #fff;
+    text-align: left;
+    padding: 5px;
+    border-radius: 6px;
+
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    right: 100%;
+    margin-right: -60px;
+
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+.tooltiptext p {
+    overflow-wrap: break-word;
+}
+
+#create-sheet {
+    margin-bottom: 15px;
 }
 
 select {
     margin-top: 10px;
 }
 
-#save-btn {
+#submit-btn, #save-btn {
     margin-top: 10px;
 }
 
