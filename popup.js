@@ -1,14 +1,19 @@
-// Repopulate popup form with previously saved data
-chrome.storage.sync.get(['formObj']).then((e) => {
-  if (Object.keys(e).length !== 0) {
-    console.log('formObj', e.formObj)
-    const keys = Object.keys(e.formObj)
-    keys.forEach((element) => {
-      const column = document.getElementById(`${element}`)
-      column.value = e.formObj[element]
-    })
-  }
-})
+
+function populateInput(data) {
+  chrome.storage.sync.get([data]).then(e => {
+    if (Object.keys(e).length !== 0) {
+      console.log('credsObj', e[data])
+      const keys = Object.keys(e[data])
+      keys.forEach((element) => {
+        const input = document.getElementById(`${element}`)
+        input.value = e[data][element]
+      })
+    }
+  })
+}
+
+populateInput('formObj')
+populateInput('credsObj')
 
 const logIn = document.getElementById('log-in')
 const logOut = document.getElementById('log-out')
@@ -57,6 +62,10 @@ function addColumn() {
 // Remove selected column
 function removeColumn() {
   this.parentElement.remove()
+}
+
+function displaySuccessMsg() {
+
 }
 
 // Store user's speadsheet credentials (id and sheet name) as obj in chrome.storage
