@@ -6,7 +6,7 @@ body {
 
 #spreadsheet-id-ex {
     font-weight: bold;
-    color: #4545a1;
+    color: #3870b9;
 }
 
 #spreadsheet-id,
@@ -23,9 +23,7 @@ body {
 .tooltip .tooltiptext {
     visibility: hidden;
     width: 250px;
-    font-size: 12px;
-    background-color: #555;
-    color: #fff;
+    background-color: #dcdde7;
     text-align: left;
     padding: 5px;
     border-radius: 6px;
@@ -37,7 +35,7 @@ body {
     margin-right: -60px;
 
     opacity: 0;
-    transition: opacity 0.3s;
+    transition: opacity 0.4s;
 }
 
 .tooltip:hover .tooltiptext {
@@ -94,6 +92,11 @@ fieldset {
 }
 #submit-btn:hover, #save-btn:hover {
     background-color: #044593;
+}
+
+.highlight {
+    font-weight: bold;
+    color: #0d5bba;
 }
 
 .hide {
