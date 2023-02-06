@@ -13,6 +13,7 @@ chrome.storage.sync.get(['formObj']).then((e) => {
 const logIn = document.getElementById('log-in')
 const logOut = document.getElementById('log-out')
 const customColumns = document.querySelector('.custom-columns')
+const submitButton = document.getElementById('submit-btn')
 const addColumnButton = document.getElementById('add-column-btn')
 const saveButton = document.getElementById('save-btn')
 
@@ -58,6 +59,7 @@ function removeColumn() {
   this.parentElement.remove()
 }
 
+// Store user's speadsheet credentials (id and sheet name) as obj in chrome.storage
 function storeSpreadsheetCreds() {
   const creds = document.getElementById('spreadsheet-creds-form')
   const credsData = new FormData(creds)
@@ -67,6 +69,7 @@ function storeSpreadsheetCreds() {
   })
 }
 
+// Store user's custom spreadsheet columns as obj in chrome.storage
 function storeFormData() {
   const form = document.getElementById('form')
   const formData = new FormData(form)
@@ -82,6 +85,11 @@ function storeFormData() {
   //
   // => result is someValue
 }
+
+submitButton.addEventListener('click', event => {
+  event.preventDefault()
+  storeSpreadsheetCreds()
+})
 
 addColumnButton.addEventListener('click', event => {
   event.preventDefault()
