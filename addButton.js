@@ -27,7 +27,7 @@ function getUserToken() {
     chrome.runtime.sendMessage({ text: "Token Request from addButton.js" }, function (response) {
         console.log("Response: ", response)
         userToken = response.substring(response.indexOf(':') + 2)
-        perform()
+        sendToSpreadsheet()
     })
 }
 
@@ -62,13 +62,24 @@ function getUrl() {
     return `https://www.linkedin.com/jobs/view/${jobId}`
 }
 
-async function perform() {
+function getSpreadsheetUrl() {
+    chrome.storage.sync.get(['credsObj']).then(res => {
+        const spreadsheetId = res.credsObj['spreadsheet-id']
+        const sheetName = res.credsObj['sheet-name']
+        console.log ('spreadsheet id', spreadsheetId)
+        console.log('sheetName', sheetName)
+        return `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetName}!A1:append?valueInputOption=USER_ENTERED`
+    })
+}
+
+async function sendToSpreadsheet() {
     // PUT request -
     // const url = 'https://sheets.googleapis.com/v4/spreadsheets/1OOkUXS1hRShfFReqizv0gvmTTvVdIpwrGCHPpCOsDuQ/values/A1?valueInputOption=USER_ENTERED';
     chrome.storage.sync.get(['formObj']).then(e => {
         if (Object.keys(e).length !== 0) {
             // POST request -
-            const spreadsheetUrl = 'https://sheets.googleapis.com/v4/spreadsheets/1OOkUXS1hRShfFReqizv0gvmTTvVdIpwrGCHPpCOsDuQ/values/Jobs!A1:append?valueInputOption=USER_ENTERED'
+            // const spreadsheetUrl = 'https://sheets.googleapis.com/v4/spreadsheets/1OOkUXS1hRShfFReqizv0gvmTTvVdIpwrGCHPpCOsDuQ/values/Jobs!A1:append?valueInputOption=USER_ENTERED'
+            const spreadsheetUrl = getSpreadsheetUrl()
             console.log('values are =>', Object.values(e.formObj))
             const values = Object.values(e.formObj)
             const mappedValues = values.map(field => {
@@ -115,6 +126,7 @@ function afterDOMLoaded() {
 
     addButton.addEventListener('click', () => {
         getUserToken()
+        getSpreadsheetUrl()
     })
 }
 
