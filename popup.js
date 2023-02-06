@@ -1,6 +1,7 @@
-chrome.storage.sync.get(['formObj']).then((e)=> {
+// Repopulate popup form with previously saved data
+chrome.storage.sync.get(['formObj']).then((e) => {
   if (Object.keys(e).length !== 0) {
-    console.log(e.formObj)
+    console.log('formObj', e.formObj)
     const keys = Object.keys(e.formObj)
     keys.forEach((element) => {
       const column = document.getElementById(`${element}`)
@@ -57,12 +58,21 @@ function removeColumn() {
   this.parentElement.remove()
 }
 
+function storeSpreadsheetCreds() {
+  const creds = document.getElementById('spreadsheet-creds-form')
+  const credsData = new FormData(creds)
+  const credsObj = Object.fromEntries(credsData)
+  chrome.storage.sync.set({ 'credsObj': credsObj }).then(() => {
+    console.log('stored creds')
+  })
+}
+
 function storeFormData() {
   const form = document.getElementById('form')
   const formData = new FormData(form)
   const formObj = Object.fromEntries(formData)
   chrome.storage.sync.set({ 'formObj': formObj }).then(() => {
-    console.log('stored')
+    console.log('stored form')
   })
   // get result
   //
