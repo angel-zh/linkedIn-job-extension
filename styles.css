@@ -81,6 +81,14 @@ fieldset {
     margin-top: 10px;
 }
 
+.remove-btn {
+    background-color: white;
+    color: #df2929;
+    border: 1px solid gray;
+    margin-left: 2px;
+    padding: 2px 6px;
+}
+
 #submit-btn,
 #save-btn {
     background-color: #0d5bba;
@@ -90,8 +98,13 @@ fieldset {
 .button:hover {
     background-color: #e7f2ff;
 }
+
 #submit-btn:hover, #save-btn:hover {
     background-color: #044593;
+}
+
+.remove-btn:hover {
+    background-color: #faeaea;
 }
 
 .highlight {
