@@ -11,7 +11,7 @@ let userToken = ""
 
 window.addEventListener("load", runChecks, false)
 
-function runChecks(evt) {
+function runChecks() {
     let timer = setInterval(checkForButton, 200)
 
     function checkForButton() {
@@ -32,7 +32,7 @@ function getUserToken() {
 }
 
 function getJobTitle() {
-    return document.getElementsByClassName('jobs-unified-top-card__job-title')[0].innerText
+    return document.querySelector('.jobs-unified-top-card__job-title').innerText
 }
 
 function getCompany() {
