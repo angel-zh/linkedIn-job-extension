@@ -1,5 +1,5 @@
 let userToken = ""
-
+let spreadsheetUrl = ""
 // chrome.runtime.onMessage.addListener(
 //     function (request, sender, sendResponse) {
 //         // listen for messages sent from background.js
@@ -68,18 +68,18 @@ function getSpreadsheetUrl() {
         const sheetName = res.credsObj['sheet-name']
         console.log ('spreadsheet id', spreadsheetId)
         console.log('sheetName', sheetName)
-        return `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetName}!A1:append?valueInputOption=USER_ENTERED`
+        return spreadsheetUrl = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetName}!A1:append?valueInputOption=USER_ENTERED`
     })
 }
 
 async function sendToSpreadsheet() {
     // PUT request -
-    // const url = 'https://sheets.googleapis.com/v4/spreadsheets/1OOkUXS1hRShfFReqizv0gvmTTvVdIpwrGCHPpCOsDuQ/values/A1?valueInputOption=USER_ENTERED';
+    // const url = 'https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetName}!1:1?valueInputOption=USER_ENTERED';
     chrome.storage.sync.get(['formObj']).then(e => {
         if (Object.keys(e).length !== 0) {
             // POST request -
             // const spreadsheetUrl = 'https://sheets.googleapis.com/v4/spreadsheets/1OOkUXS1hRShfFReqizv0gvmTTvVdIpwrGCHPpCOsDuQ/values/Jobs!A1:append?valueInputOption=USER_ENTERED'
-            const spreadsheetUrl = getSpreadsheetUrl()
+            // const spreadsheetUrl = getSpreadsheetUrl()
             console.log('values are =>', Object.values(e.formObj))
             const values = Object.values(e.formObj)
             const mappedValues = values.map(field => {
