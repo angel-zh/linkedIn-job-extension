@@ -8,7 +8,7 @@ const createSheetButton = document.getElementById('create-sheet-btn')
 
 let userToken = ""
 let counter = 1
-let spreadsheetUrl = ""
+let requestUrl = ""
 
 // Retrieve saved data from chrome.storage and populate form inputs
 function populateInput(data) {
@@ -21,7 +21,6 @@ function populateInput(data) {
       }
     }
     if (Object.keys(e).length !== 0) {
-
       console.log('obj from storage', e[data])
       const keys = Object.keys(e[data])
       keys.forEach((element) => {
@@ -98,6 +97,7 @@ function storeSpreadsheetCreds() {
     console.log('stored creds')
     displaySuccessMsg('stored creds')
   })
+  generateLink(credsObj['spreadsheet-id'])
 }
 
 // Store user's custom spreadsheet columns as obj in chrome.storage
@@ -109,6 +109,12 @@ function storeFormData() {
     console.log('stored form')
     displaySuccessMsg('stored form')
   })
+}
+
+function generateLink(id) {
+  const link = document.getElementById('link')
+  const url = `https://docs.google.com/spreadsheets/d/${id}/edit`
+  link.innerHTML = `<a href=${url} target="blank">${url}</a>`
 }
 
 function createNewSpreadsheet() {
@@ -134,19 +140,18 @@ function createNewSpreadsheet() {
     })
       .then(res => res.json())
       .then(res => {
-        console.log('this is the spreadsheetURL =>', res.spreadsheetUrl)
-        console.log('this is the spreadsheet ID =>', res.spreadsheetId)
+        console.log('this is the new spreadsheetURL =>', res.spreadsheetUrl)
+        console.log('this is the new spreadsheet ID =>', res.spreadsheetId)
+        generateLink(res.spreadsheetUrl)
       })
   })
 }
 
-function getSpreadsheetUrl() {
+function getRequestUrl() {
   chrome.storage.sync.get(['credsObj']).then(res => {
     const spreadsheetId = res.credsObj['spreadsheet-id']
     const sheetName = res.credsObj['sheet-name']
-    console.log('spreadsheet id', spreadsheetId)
-    console.log('sheetName', sheetName)
-    return spreadsheetUrl = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetName}!1:1?valueInputOption=USER_ENTERED`
+    return requestUrl = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/'${sheetName}'!1:1?valueInputOption=USER_ENTERED`
   })
 }
 
@@ -160,7 +165,7 @@ async function sendColTitles() {
       if (Object.keys(e).length !== 0) {
         const values = Object.values(e.formObj)
         
-        fetch(spreadsheetUrl, {
+        fetch(requestUrl, {
           method: "PUT",
           headers: {
             "Authorization": "Bearer " + userToken,
@@ -184,12 +189,13 @@ submitButton.addEventListener('click', event => {
 addColumnButton.addEventListener('click', event => {
   event.preventDefault()
   addColumn()
+  // generateLink('hello')
 })
 
 saveButton.addEventListener('click', event => {
   event.preventDefault()
   storeFormData()
-  getSpreadsheetUrl()
+  getRequestUrl()
   sendColTitles()
 })
 
