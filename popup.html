@@ -41,10 +41,12 @@
     <a href="https://docs.google.com/spreadsheets/create" id="create-sheet-link" target="_blank">
         or create new spreadsheet
     </a>
+    <button id="create-sheet-btn" class="button">a button</button>
 
     <form id="form">
-        <fieldset>
+        <fieldset id="fieldset">
             <legend>Custom Spreadsheet Columns</legend>
+            <p>The drop-down options below are data that can be readily extracted from LinkedIn Jobs.</p>
             <label for="col-1">Column 1: </label>
             <select name="col-1" id="col-1" class="col">
                 <option value="" class="placeholder" selected>Select Col Title</option>
@@ -92,7 +94,7 @@
             </select><br>
             <div class="custom-columns">
             </div>
-            <button id="add-column-btn" class="button">+ Column</button>
+            <button id="add-column-btn" class="button">+ Custom Column</button>
             <input id='save-btn' type="submit" value="Save" class="button">
         </fieldset>
     </form>
