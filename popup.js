@@ -1,13 +1,16 @@
 // Retrieve saved data from chrome.storage and populate form inputs
 function populateInput(data) {
   chrome.storage.sync.get([data]).then(e => {
-    if (Object.keys(e).length !== 0) {
-      console.log('credsObj', e[data])
+    if (Object.keys(e).length !== 0 && Object.keys(e).length <= 5) {
+      console.log('obj from storage', e[data])
       const keys = Object.keys(e[data])
       keys.forEach((element) => {
         const input = document.getElementById(`${element}`)
         input.value = e[data][element]
       })
+    }
+    if (Object.keys(e).length > 5) {
+      console.log('uh')
     }
   })
 }
@@ -21,6 +24,7 @@ const customColumns = document.querySelector('.custom-columns')
 const submitButton = document.getElementById('submit-btn')
 const addColumnButton = document.getElementById('add-column-btn')
 const saveButton = document.getElementById('save-btn')
+const createSheetButton = document.getElementById('create-sheet-btn')
 
 let userToken = ""
 let counter = 1
@@ -64,6 +68,7 @@ function removeColumn() {
   this.parentElement.remove()
 }
 
+// Display message on successful submit
 function displaySuccessMsg(str) {
   const p = document.createElement('p')
   p.innerText = 'Success!'
@@ -96,13 +101,34 @@ function storeFormData() {
     console.log('stored form')
     displaySuccessMsg('stored form')
   })
-  // get result
-  //
-  // chrome.storage.sync.get(["formObj"]).then((result)=> {
-  //   console.log('result is ' + result.someKey)
-  // })
-  //
-  // => result is someValue
+}
+
+function createNewSpreadsheet() {
+  chrome.runtime.sendMessage({ text: "Login Request from popup.js" }, function (response) {
+    console.log("Response: ", response)
+    userToken = response.substring(response.indexOf(':') + 2)
+    fetch('https://sheets.googleapis.com/v4/spreadsheets', {
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer " + userToken,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ "sheets": 
+        [
+          {
+            "properties" : {
+              "title" : 'TESTTTTTTT'
+            }
+          } 
+        ]
+      })
+    })
+      .then(res => res.json())
+      .then(res => {
+        console.log('this is the spreadsheetURL =>', res.spreadsheetUrl)
+        console.log('this is the spreadsheet ID =>', res.spreadsheetId)
+      })
+  })
 }
 
 submitButton.addEventListener('click', event => {
@@ -120,4 +146,7 @@ saveButton.addEventListener('click', event => {
   storeFormData()
 })
 
-
+createSheetButton.addEventListener('click', event => {
+  event.preventDefault()
+  createNewSpreadsheet()
+})
