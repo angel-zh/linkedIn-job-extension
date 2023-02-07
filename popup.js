@@ -1,23 +1,3 @@
-// Retrieve saved data from chrome.storage and populate form inputs
-function populateInput(data) {
-  chrome.storage.sync.get([data]).then(e => {
-    if (Object.keys(e).length !== 0 && Object.keys(e).length <= 5) {
-      console.log('obj from storage', e[data])
-      const keys = Object.keys(e[data])
-      keys.forEach((element) => {
-        const input = document.getElementById(`${element}`)
-        input.value = e[data][element]
-      })
-    }
-    if (Object.keys(e).length > 5) {
-      console.log('uh')
-    }
-  })
-}
-
-populateInput('formObj')
-populateInput('credsObj')
-
 const logIn = document.getElementById('log-in')
 const logOut = document.getElementById('log-out')
 const customColumns = document.querySelector('.custom-columns')
@@ -29,6 +9,30 @@ const createSheetButton = document.getElementById('create-sheet-btn')
 let userToken = ""
 let counter = 1
 
+// Retrieve saved data from chrome.storage and populate form inputs
+function populateInput(data) {
+  chrome.storage.sync.get([data]).then(e => {
+    if (Object.keys(e[data]).length > 5) {
+      const num = Object.keys(e[data]).length - 5
+      console.log('num', num)
+      for (let i = 0; i < num; i++) {
+        addColumn()
+      }
+    }
+    if (Object.keys(e).length !== 0) {
+
+      console.log('obj from storage', e[data])
+      const keys = Object.keys(e[data])
+      keys.forEach((element) => {
+        const input = document.getElementById(`${element}`)
+        input.value = e[data][element]
+      })
+    }
+  })
+}
+
+populateInput('formObj')
+populateInput('credsObj')
 // Log in and retrieve user token by sending message to background.js
 logIn.addEventListener('click', () => {
   chrome.runtime.sendMessage({ text: "Login Request from popup.js" }, function (response) {
@@ -52,6 +56,7 @@ function addColumn() {
   const span = document.createElement('span')
   input.type = 'text'
   input.setAttribute('name', `custom-col-${counter}`)
+  input.setAttribute('id', `custom-col-${counter}` )
   input.classList.add('col')
   input.placeholder = 'Enter Column Title'
   removeButton.innerText = 'x'
