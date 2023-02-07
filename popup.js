@@ -8,6 +8,7 @@ const createSheetButton = document.getElementById('create-sheet-btn')
 
 let userToken = ""
 let counter = 1
+let spreadsheetUrl = ""
 
 // Retrieve saved data from chrome.storage and populate form inputs
 function populateInput(data) {
@@ -33,6 +34,7 @@ function populateInput(data) {
 
 populateInput('formObj')
 populateInput('credsObj')
+
 // Log in and retrieve user token by sending message to background.js
 logIn.addEventListener('click', () => {
   chrome.runtime.sendMessage({ text: "Login Request from popup.js" }, function (response) {
@@ -56,11 +58,12 @@ function addColumn() {
   const span = document.createElement('span')
   input.type = 'text'
   input.setAttribute('name', `custom-col-${counter}`)
-  input.setAttribute('id', `custom-col-${counter}` )
+  input.setAttribute('id', `custom-col-${counter}`)
   input.classList.add('col')
   input.placeholder = 'Enter Column Title'
   removeButton.innerText = 'x'
   removeButton.onclick = removeColumn
+  removeButton.setAttribute('class', 'remove-btn')
   span.setAttribute('id', `custom-${counter}`)
   span.appendChild(input)
   span.appendChild(removeButton)
@@ -109,7 +112,7 @@ function storeFormData() {
 }
 
 function createNewSpreadsheet() {
-  chrome.runtime.sendMessage({ text: "Login Request from popup.js" }, function (response) {
+  chrome.runtime.sendMessage({ text: "Token Request from popup.js" }, function (response) {
     console.log("Response: ", response)
     userToken = response.substring(response.indexOf(':') + 2)
     fetch('https://sheets.googleapis.com/v4/spreadsheets', {
@@ -118,14 +121,15 @@ function createNewSpreadsheet() {
         "Authorization": "Bearer " + userToken,
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ "sheets": 
-        [
-          {
-            "properties" : {
-              "title" : 'TESTTTTTTT'
+      body: JSON.stringify({
+        "sheets":
+          [
+            {
+              "properties": {
+                "title": 'TESTTTTTTT'
+              }
             }
-          } 
-        ]
+          ]
       })
     })
       .then(res => res.json())
@@ -133,6 +137,42 @@ function createNewSpreadsheet() {
         console.log('this is the spreadsheetURL =>', res.spreadsheetUrl)
         console.log('this is the spreadsheet ID =>', res.spreadsheetId)
       })
+  })
+}
+
+function getSpreadsheetUrl() {
+  chrome.storage.sync.get(['credsObj']).then(res => {
+    const spreadsheetId = res.credsObj['spreadsheet-id']
+    const sheetName = res.credsObj['sheet-name']
+    console.log('spreadsheet id', spreadsheetId)
+    console.log('sheetName', sheetName)
+    return spreadsheetUrl = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetName}!1:1?valueInputOption=USER_ENTERED`
+  })
+}
+
+async function sendColTitles() {
+  // PUT request -
+  chrome.runtime.sendMessage({ text: "Login Request from popup.js" }, function (response) {
+    console.log("Response: ", response)
+    userToken = response.substring(response.indexOf(':') + 2)
+
+    chrome.storage.sync.get(['formObj']).then(e => {
+      if (Object.keys(e).length !== 0) {
+        const values = Object.values(e.formObj)
+        
+        fetch(spreadsheetUrl, {
+          method: "PUT",
+          headers: {
+            "Authorization": "Bearer " + userToken,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ "values": [values] })
+        })
+          .then(res => res.json())
+          .then(res => console.log(res))
+          .catch(err => console.log(err))
+      }
+    })
   })
 }
 
@@ -149,6 +189,8 @@ addColumnButton.addEventListener('click', event => {
 saveButton.addEventListener('click', event => {
   event.preventDefault()
   storeFormData()
+  getSpreadsheetUrl()
+  sendColTitles()
 })
 
 createSheetButton.addEventListener('click', event => {
