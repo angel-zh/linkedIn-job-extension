@@ -11,7 +11,7 @@ let counter = 1
 let requestUrl = ""
 
 // Retrieve saved data from chrome.storage and populate form inputs
-function populateInput(data) {
+function populateInput(data, addCredLink = false) {
   chrome.storage.sync.get([data]).then(e => {
     if (Object.keys(e[data]).length > 5) {
       const num = Object.keys(e[data]).length - 5
@@ -27,12 +27,16 @@ function populateInput(data) {
         const input = document.getElementById(`${element}`)
         input.value = e[data][element]
       })
+
+      if (addCredLink) {
+        generateLink(e[data]['spreadsheet-id'])
+      }
     }
   })
 }
 
 populateInput('formObj')
-populateInput('credsObj')
+populateInput('credsObj', true)
 
 // Log in and retrieve user token by sending message to background.js
 logIn.addEventListener('click', () => {
@@ -126,23 +130,14 @@ function createNewSpreadsheet() {
       headers: {
         "Authorization": "Bearer " + userToken,
         "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        "sheets":
-          [
-            {
-              "properties": {
-                "title": 'TESTTTTTTT'
-              }
-            }
-          ]
-      })
+      }
     })
       .then(res => res.json())
       .then(res => {
         console.log('this is the new spreadsheetURL =>', res.spreadsheetUrl)
         console.log('this is the new spreadsheet ID =>', res.spreadsheetId)
-        generateLink(res.spreadsheetUrl)
+        displaySuccessMsg('stored creds')
+        generateLink(res.spreadsheetId)
       })
   })
 }
@@ -164,7 +159,7 @@ async function sendColTitles() {
     chrome.storage.sync.get(['formObj']).then(e => {
       if (Object.keys(e).length !== 0) {
         const values = Object.values(e.formObj)
-        
+
         fetch(requestUrl, {
           method: "PUT",
           headers: {
@@ -181,6 +176,11 @@ async function sendColTitles() {
   })
 }
 
+function confirmAction() {
+  const response = confirm("Do you want to create a new Google spreadsheet?")
+  response ? createNewSpreadsheet() : null
+}
+
 submitButton.addEventListener('click', event => {
   event.preventDefault()
   storeSpreadsheetCreds()
@@ -189,7 +189,6 @@ submitButton.addEventListener('click', event => {
 addColumnButton.addEventListener('click', event => {
   event.preventDefault()
   addColumn()
-  // generateLink('hello')
 })
 
 saveButton.addEventListener('click', event => {
@@ -201,5 +200,5 @@ saveButton.addEventListener('click', event => {
 
 createSheetButton.addEventListener('click', event => {
   event.preventDefault()
-  createNewSpreadsheet()
+  confirmAction()
 })
