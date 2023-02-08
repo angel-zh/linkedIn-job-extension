@@ -115,12 +115,14 @@ function storeFormData() {
   })
 }
 
+// Creates a link to the user's spreadsheet
 function generateLink(id) {
   const link = document.getElementById('link')
   const url = `https://docs.google.com/spreadsheets/d/${id}/edit`
   link.innerHTML = `<a href=${url} target="blank">${url}</a>`
 }
 
+// Creates a new spreadsheet
 function createNewSpreadsheet() {
   chrome.runtime.sendMessage({ text: "Token Request from popup.js" }, function (response) {
     console.log("Response: ", response)
@@ -136,12 +138,15 @@ function createNewSpreadsheet() {
       .then(res => {
         console.log('this is the new spreadsheetURL =>', res.spreadsheetUrl)
         console.log('this is the new spreadsheet ID =>', res.spreadsheetId)
-        displaySuccessMsg('stored creds')
+        document.getElementById('spreadsheet-id').value = res.spreadsheetId
+        document.getElementById('sheet-name').value = 'Sheet1'
+        storeSpreadsheetCreds()
         generateLink(res.spreadsheetId)
       })
   })
 }
 
+// Generates the URL for PUT request to send/update column titles
 function getRequestUrl() {
   chrome.storage.sync.get(['credsObj']).then(res => {
     const spreadsheetId = res.credsObj['spreadsheet-id']
@@ -150,6 +155,7 @@ function getRequestUrl() {
   })
 }
 
+// Updates the first row of spreadsheet with selected column titles
 async function sendColTitles() {
   // PUT request -
   chrome.runtime.sendMessage({ text: "Login Request from popup.js" }, function (response) {
@@ -176,6 +182,7 @@ async function sendColTitles() {
   })
 }
 
+// Confirm new spreadsheet creation
 function confirmAction() {
   const response = confirm("Do you want to create a new Google spreadsheet?")
   response ? createNewSpreadsheet() : null
