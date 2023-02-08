@@ -1,5 +1,5 @@
 let userToken = ""
-let spreadsheetUrl = ""
+let requestUrl = ""
 // chrome.runtime.onMessage.addListener(
 //     function (request, sender, sendResponse) {
 //         // listen for messages sent from background.js
@@ -62,13 +62,13 @@ function getUrl() {
     return `https://www.linkedin.com/jobs/view/${jobId}`
 }
 
-function getSpreadsheetUrl() {
+function getRequestUrl() {
     chrome.storage.sync.get(['credsObj']).then(res => {
         const spreadsheetId = res.credsObj['spreadsheet-id']
         const sheetName = res.credsObj['sheet-name']
         console.log ('spreadsheet id', spreadsheetId)
         console.log('sheetName', sheetName)
-        return spreadsheetUrl = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetName}!A1:append?valueInputOption=USER_ENTERED`
+        return requestUrl = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/'${sheetName}'!A1:append?valueInputOption=USER_ENTERED`
     })
 }
 
@@ -99,7 +99,7 @@ async function sendToSpreadsheet() {
                 }
             })
             console.log('mappedvalues=', mappedValues)
-            fetch(spreadsheetUrl, {
+            fetch(requestUrl, {
                 method: "POST",
                 headers: {
                     "Authorization": "Bearer " + userToken,
@@ -126,7 +126,7 @@ function afterDOMLoaded() {
 
     addButton.addEventListener('click', () => {
         getUserToken()
-        getSpreadsheetUrl()
+        getRequestUrl()
     })
 }
 
