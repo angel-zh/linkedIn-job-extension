@@ -14,6 +14,10 @@ body {
     width: 250px;
 }
 
+#spreadsheet-creds-form {
+    margin: 10px 0;
+}
+
 .tooltip {
     position: relative;
     display: inline-block;
@@ -47,15 +51,31 @@ body {
     overflow-wrap: break-word;
 }
 
-#create-sheet-link {
-    font-size: 0.75rem;
-    text-decoration: none;
-    color: #21a15d;
+#create-sheet-btn {
+    font-size: 0.8rem;
+    color: #0d5bba;
+    border: 1px solid #e7f2ff;
+    background-color: #e7f2ff;
+    margin: 10px 0;
+    border-radius: 5px;
 }
 
-#create-sheet-link:hover {
-    text-decoration: underline;
-    color: #1a8b4f;
+#create-sheet-btn:hover {
+    border-color: #97b4ee;
+    color: #4991e9;
+}
+
+#link {
+    width: 300px;
+    overflow-wrap: break-word;
+}
+
+#link a, #link a:visited {
+    color: #3984e0;
+}
+
+#link a:hover {
+    color: #97b4ee;
 }
 
 #form {
@@ -109,7 +129,7 @@ fieldset {
 
 .highlight {
     font-weight: bold;
-    color: #0d5bba;
+    color: #1b9659;
 }
 
 .hide {
