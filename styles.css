@@ -1,7 +1,29 @@
+html {
+    border-width: 2px;
+    border-style: solid;
+    border-image: linear-gradient(to bottom, #0d5bba, #2b7ada, #fff) 1;
+}
+
 body {
     text-align: center;
     width: 300px;
     height: auto;
+}
+
+
+.heading h1 {
+    margin: 5px 0;
+    background-color: #2b7ada;
+    padding: 5px 0;
+    color: white;
+}
+
+.heading span {
+    border-radius: 7px;
+    padding: 0 4px;
+    margin-left: 2px;
+    background-color: white;
+    color: #2b7ada;
 }
 
 #spreadsheet-id-ex {
@@ -79,7 +101,7 @@ body {
 }
 
 #form {
-    margin-top: 15px;
+    margin: 15px 0;
 }
 
 fieldset {
