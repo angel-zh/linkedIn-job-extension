@@ -6,7 +6,6 @@ const addColumnButton = document.getElementById('add-column-btn')
 const saveButton = document.getElementById('save-btn')
 const createSheetButton = document.getElementById('create-sheet-btn')
 
-let userToken = ""
 let counter = 1
 let requestUrl = ""
 
@@ -42,7 +41,7 @@ populateInput('credsObj', true)
 logIn.addEventListener('click', () => {
   chrome.runtime.sendMessage({ text: "Login Request from popup.js" }, function (response) {
     console.log("Response: ", response)
-    userToken = response.substring(response.indexOf(':') + 2)
+    // userToken = response.substring(response.indexOf(':') + 2)
   })
 })
 
@@ -79,17 +78,24 @@ function removeColumn() {
   this.parentElement.remove()
 }
 
-// Display message on successful submit
-function displaySuccessMsg(str) {
-  const msg = document.getElementById('success-msg')
+// Display message on successful submit 
+function displaySuccessMsg(id) {
+  const msg = document.createElement('div')
   msg.innerText = 'Success!'
   msg.setAttribute('class', 'highlight')
+  document.getElementById(id).appendChild(msg)
 
-  str === 'stored creds'
-    ?
-    document.getElementById('spreadsheet-creds-form').appendChild(msg)
-    :
-    document.getElementById('fieldset').appendChild(msg)
+  function deleteMsg() {
+    msg.remove()
+  }
+  setTimeout(deleteMsg, 3000)
+}
+
+// Creates a link to the user's spreadsheet
+function generateLink(id) {
+  const link = document.getElementById('link')
+  const url = `https://docs.google.com/spreadsheets/d/${id}/edit`
+  link.innerHTML = `<a href=${url} target="blank">${url}</a>`
 }
 
 // Store user's speadsheet credentials (id and sheet name) as obj in chrome.storage
@@ -99,7 +105,7 @@ function storeSpreadsheetCreds() {
   const credsObj = Object.fromEntries(credsData)
   chrome.storage.sync.set({ 'credsObj': credsObj }).then(() => {
     console.log('stored creds')
-    displaySuccessMsg('stored creds')
+    displaySuccessMsg('spreadsheet-creds-form')
   })
   generateLink(credsObj['spreadsheet-id'])
 }
@@ -111,22 +117,15 @@ function storeFormData() {
   const formObj = Object.fromEntries(formData)
   chrome.storage.sync.set({ 'formObj': formObj }).then(() => {
     console.log('stored form')
-    displaySuccessMsg('stored form')
+    displaySuccessMsg('fieldset')
   })
-}
-
-// Creates a link to the user's spreadsheet
-function generateLink(id) {
-  const link = document.getElementById('link')
-  const url = `https://docs.google.com/spreadsheets/d/${id}/edit`
-  link.innerHTML = `<a href=${url} target="blank">${url}</a>`
 }
 
 // Creates a new spreadsheet
 function createNewSpreadsheet() {
   chrome.runtime.sendMessage({ text: "Token Request from popup.js" }, function (response) {
     console.log("Response: ", response)
-    userToken = response.substring(response.indexOf(':') + 2)
+    const userToken = response.substring(response.indexOf(':') + 2)
     fetch('https://sheets.googleapis.com/v4/spreadsheets', {
       method: "POST",
       headers: {
@@ -157,10 +156,9 @@ function getRequestUrl() {
 
 // Updates the first row of spreadsheet with selected column titles
 async function sendColTitles() {
-  // PUT request -
   chrome.runtime.sendMessage({ text: "Login Request from popup.js" }, function (response) {
     console.log("Response: ", response)
-    userToken = response.substring(response.indexOf(':') + 2)
+    const userToken = response.substring(response.indexOf(':') + 2)
 
     chrome.storage.sync.get(['formObj']).then(e => {
       if (Object.keys(e).length !== 0) {
