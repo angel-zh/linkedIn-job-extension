@@ -81,15 +81,15 @@ function removeColumn() {
 
 // Display message on successful submit
 function displaySuccessMsg(str) {
-  const p = document.createElement('p')
-  p.innerText = 'Success!'
-  p.setAttribute('class', 'highlight')
+  const msg = document.getElementById('success-msg')
+  msg.innerText = 'Success!'
+  msg.setAttribute('class', 'highlight')
 
   str === 'stored creds'
     ?
-    document.getElementById('spreadsheet-creds-form').appendChild(p)
+    document.getElementById('spreadsheet-creds-form').appendChild(msg)
     :
-    document.getElementById('fieldset').appendChild(p)
+    document.getElementById('fieldset').appendChild(msg)
 }
 
 // Store user's speadsheet credentials (id and sheet name) as obj in chrome.storage

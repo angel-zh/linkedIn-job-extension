@@ -110,6 +110,11 @@ fieldset {
     border: 1px solid #0d5bba;
 }
 
+legend {
+    font-weight: 500;
+    color: black;
+}
+
 .col {
     margin-top: 10px;
 }
@@ -120,7 +125,7 @@ fieldset {
     padding: 5px 10px;
     color: #0d5bba;
     background-color: white;
-    margin-top: 10px;
+    margin: 10px 0;
 }
 
 .remove-btn {
