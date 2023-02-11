@@ -37,7 +37,7 @@ body {
 }
 
 #spreadsheet-creds-form {
-    margin: 10px 0;
+    margin: 5px 0;
 }
 
 .tooltip {
@@ -49,11 +49,11 @@ body {
 .tooltip .tooltiptext {
     visibility: hidden;
     width: 250px;
-    background-color: #dcdde7;
+    background-color: #f3f4fb;
     text-align: left;
     padding: 5px;
     border-radius: 6px;
-
+    box-shadow: 1px 1px 3px #898cb4;
     position: absolute;
     z-index: 1;
     top: 100%;
@@ -71,6 +71,7 @@ body {
 
 .tooltiptext p {
     overflow-wrap: break-word;
+    margin: 3px 5px;
 }
 
 #create-sheet-btn {
