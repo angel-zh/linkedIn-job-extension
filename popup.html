@@ -14,38 +14,40 @@
         <h1>Added<span>In</span></h1>
     </div>
     <button id="log-in" class="button">Log In</button>
-    <button id="log-out" class="button">Log Out</button>
-    <form id="spreadsheet-creds-form">
-        <label for="spreadsheet-id">
-            Enter your Google spreadsheet ID
-            <div class="tooltip">ⓘ
-                <span class="tooltiptext">
-                    <p><span class="highlight">Spreadsheet ID</span> can be found in the URL of your spreadsheet. <br>Example:
-                        https://docs.google.com/spreadsheets/d/<span
-                            id="spreadsheet-id-ex">1OOkUXS1cRSxfFReqizv7gvmTTvVeIpwrGCHdpCOsDaQ</span>/edit#gid=0
-                    </p>
-                </span>
-            </div>:
-        </label>
-        <input type="text" name="spreadsheet-id" id="spreadsheet-id" placeholder="Spreadsheet ID" required><br>
-        <label for="sheet-name">
-            Enter the sheet name
-            <div class="tooltip">ⓘ
-                <span class="tooltiptext">
-                    <p>
-                        <span class="highlight">Sheet Name</span> can be found at the bottom tab of the spreadsheet.
-                    </p>
-                </span>
-            </div>:
-        </label>
-        <input type="text" name="sheet-name" id="sheet-name" placeholder="Eg. Sheet1" required>
-        <input id="submit-btn" type="submit" value="Submit" class="button">
-        <button id="create-sheet-btn">or create new spreadsheet</button>
-    </form>
-    <!-- <div id="success-msg"></div> -->
-    <div id="link"></div>
 
-    <form id="form">
+    <section id="spreadsheet-creds" class="hide">
+        <form id="spreadsheet-creds-form">
+            <label for="spreadsheet-id">
+                Enter your Google spreadsheet ID
+                <div class="tooltip">ⓘ
+                    <span class="tooltiptext">
+                        <p><span class="highlight">Spreadsheet ID</span> can be found in the URL of your spreadsheet.
+                            <br>Example:
+                            https://docs.google.com/spreadsheets/d/<span
+                                id="spreadsheet-id-ex">1OOkUXS1cRSxfFReqizv7gvmTTvVeIpwrGCHdpCOsDaQ</span>/edit#gid=0
+                        </p>
+                    </span>
+                </div>:
+            </label>
+            <input type="text" name="spreadsheet-id" id="spreadsheet-id" placeholder="Spreadsheet ID" required><br>
+            <label for="sheet-name">
+                Enter the sheet name
+                <div class="tooltip">ⓘ
+                    <span class="tooltiptext">
+                        <p>
+                            <span class="highlight">Sheet Name</span> can be found at the bottom tab of the spreadsheet.
+                        </p>
+                    </span>
+                </div>:
+            </label>
+            <input type="text" name="sheet-name" id="sheet-name" placeholder="Eg. Sheet1" required>
+            <input id="submit-btn" type="submit" value="Submit" class="button">
+            <button id="create-sheet-btn">or create new spreadsheet</button>
+        </form>
+        <div id="link"></div>
+    </section>
+
+    <form id="form" class="hide">
         <fieldset id="fieldset">
             <legend>Custom Spreadsheet Columns</legend>
             <p>The drop-down options below are data that can be readily extracted from LinkedIn Jobs.</p>

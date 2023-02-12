@@ -1,13 +1,18 @@
 const logIn = document.getElementById('log-in')
 const logOut = document.getElementById('log-out')
-const customColumns = document.querySelector('.custom-columns')
 const submitButton = document.getElementById('submit-btn')
 const addColumnButton = document.getElementById('add-column-btn')
 const saveButton = document.getElementById('save-btn')
 const createSheetButton = document.getElementById('create-sheet-btn')
+const customColumns = document.querySelector('.custom-columns')
 
 let counter = 1
 let requestUrl = ""
+
+chrome.storage.sync.get(["isLoggedIn"]).then((result) => {
+  if (!result)
+  console.log("User is logged in:" + result.isLoggedIn)
+})
 
 // Retrieve saved data from chrome.storage and populate form inputs
 function populateInput(data, addCredLink = false) {
@@ -40,18 +45,22 @@ populateInput('credsObj', true)
 // Log in and retrieve user token by sending message to background.js
 logIn.addEventListener('click', () => {
   chrome.runtime.sendMessage({ text: "Login Request from popup.js" }, function (response) {
-    console.log("Response: ", response)
-    // userToken = response.substring(response.indexOf(':') + 2)
+    console.log(response)
+    logIn.classList.add('hide')
   })
 })
 
-// Log out does not work yet
-logOut.addEventListener('click', () => {
-  console.log(userToken)
-  window.fetch(`https://accounts.google.com/o/oauth2/revoke?token=${userToken}`)
-    .then(response => response.json())
-    .then(data => console.log(data))
-})
+// Show section for user to enter spreadsheet ID and sheet name
+function showCredsSection() {
+  const credsSection = document.getElementById('spreadsheet-creds')
+  credsSection.classList.remove('hide')
+}
+
+// Show form for user to select columns for spreadsheet
+function showCustomForm() {
+  const form = document.getElementById('form')
+  form.classList.remove('hide')
+}
 
 // Add a custom column to the spreadsheet form
 function addColumn() {
@@ -88,7 +97,7 @@ function displaySuccessMsg(id) {
   function deleteMsg() {
     msg.remove()
   }
-  setTimeout(deleteMsg, 3000)
+  setTimeout(deleteMsg, 2000)
 }
 
 // Creates a link to the user's spreadsheet
@@ -125,7 +134,8 @@ function storeFormData() {
 function createNewSpreadsheet() {
   chrome.runtime.sendMessage({ text: "Token Request from popup.js" }, function (response) {
     console.log("Response: ", response)
-    const userToken = response.substring(response.indexOf(':') + 2)
+    const userToken = response
+
     fetch('https://sheets.googleapis.com/v4/spreadsheets', {
       method: "POST",
       headers: {
@@ -135,8 +145,6 @@ function createNewSpreadsheet() {
     })
       .then(res => res.json())
       .then(res => {
-        console.log('this is the new spreadsheetURL =>', res.spreadsheetUrl)
-        console.log('this is the new spreadsheet ID =>', res.spreadsheetId)
         document.getElementById('spreadsheet-id').value = res.spreadsheetId
         document.getElementById('sheet-name').value = 'Sheet1'
         storeSpreadsheetCreds()
@@ -157,8 +165,8 @@ function getRequestUrl() {
 // Updates the first row of spreadsheet with selected column titles
 async function sendColTitles() {
   chrome.runtime.sendMessage({ text: "Login Request from popup.js" }, function (response) {
-    console.log("Response: ", response)
-    const userToken = response.substring(response.indexOf(':') + 2)
+    console.log("Response:", response)
+    const userToken = response
 
     chrome.storage.sync.get(['formObj']).then(e => {
       if (Object.keys(e).length !== 0) {
