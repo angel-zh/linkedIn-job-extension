@@ -12,38 +12,35 @@ const form = document.getElementById('form')
 let counter = 1
 let requestUrl = ""
 
-// Check chrome storage for logged in status to conditionally render sections
-chrome.storage.sync.get(["isLoggedIn", "credsObj"]).then((result) => {
-  console.log('isLoggedIn', result.isLoggedIn)
-  console.log('credsObj', result.credsObj)
+// Check chrome storage for variables to conditionally render sections on load
+chrome.storage.sync.get(["isLoggedIn", "credsObj"]).then(result => {
   if (result.isLoggedIn !== true) {
     logIn.classList.remove('hide')
     credsSection.classList.add('hide')
     form.classList.add('hide')
   }
-  if (result.isLoggedIn && result.credsObj === undefined ) {
+  if (result.isLoggedIn && result.credsObj === undefined) {
     form.classList.add('hide')
   }
 })
 
-// Retrieve saved data from chrome.storage and populate form inputs
-function populateInput(data, addCredLink = false) {
-  chrome.storage.sync.get([data]).then(e => {
-    if (Object.keys(e[data]).length > 5) {
-      const num = Object.keys(e[data]).length - 5
-      for (let i = 0; i < num; i++) {
-        addColumn()
+// Retrieve saved data from chrome storage and populate form inputs
+function populateInput(data, addLink = false) {
+  chrome.storage.sync.get([data]).then(result => {
+    if (result !== undefined) {
+      if (Object.keys(result[data]).length > 5) {
+        const num = Object.keys(result[data]).length - 5
+        for (let i = 0; i < num; i++) {
+          addColumn()
+        }
       }
-    }
-    if (Object.keys(e).length !== 0) {
-      const keys = Object.keys(e[data])
+      const keys = Object.keys(result[data])
       keys.forEach((element) => {
         const input = document.getElementById(`${element}`)
-        input.value = e[data][element]
+        input.value = result[data][element]
       })
-
-      if (addCredLink) {
-        generateLink(e[data]['spreadsheet-id'])
+      if (addLink) {
+        generateLink(result[data]['spreadsheet-id'])
       }
     }
   })
@@ -60,6 +57,7 @@ logIn.addEventListener('click', () => {
     credsSection.classList.remove('hide')
   })
 })
+
 
 // Add a custom column to the spreadsheet form
 function addColumn() {
@@ -156,9 +154,9 @@ function createNewSpreadsheet() {
 
 // Generates the URL for PUT request to send/update column titles
 function getRequestUrl() {
-  chrome.storage.sync.get(['credsObj']).then(res => {
-    const spreadsheetId = res.credsObj['spreadsheet-id']
-    const sheetName = res.credsObj['sheet-name']
+  chrome.storage.sync.get(['credsObj']).then(result => {
+    const spreadsheetId = result.credsObj['spreadsheet-id']
+    const sheetName = result.credsObj['sheet-name']
     return requestUrl = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/'${sheetName}'!1:1?valueInputOption=USER_ENTERED`
   })
 }
@@ -169,9 +167,9 @@ async function sendColTitles() {
     console.log("Response:", response)
     const userToken = response
 
-    chrome.storage.sync.get(['formObj']).then(e => {
-      if (Object.keys(e).length !== 0) {
-        const values = Object.values(e.formObj)
+    chrome.storage.sync.get(['formObj']).then(result => {
+      if (Object.keys(result).length !== 0) {
+        const values = Object.values(result.formObj)
 
         fetch(requestUrl, {
           method: "PUT",
