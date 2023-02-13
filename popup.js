@@ -6,12 +6,24 @@ const saveButton = document.getElementById('save-btn')
 const createSheetButton = document.getElementById('create-sheet-btn')
 const customColumns = document.querySelector('.custom-columns')
 
+const credsSection = document.getElementById('spreadsheet-creds')
+const form = document.getElementById('form')
+
 let counter = 1
 let requestUrl = ""
 
-chrome.storage.sync.get(["isLoggedIn"]).then((result) => {
-  if (!result)
-  console.log("User is logged in:" + result.isLoggedIn)
+// Check chrome storage for logged in status to conditionally render sections
+chrome.storage.sync.get(["isLoggedIn", "credsObj"]).then((result) => {
+  console.log('isLoggedIn', result.isLoggedIn)
+  console.log('credsObj', result.credsObj)
+  if (result.isLoggedIn !== true) {
+    logIn.classList.remove('hide')
+    credsSection.classList.add('hide')
+    form.classList.add('hide')
+  }
+  if (result.isLoggedIn && result.credsObj === undefined ) {
+    form.classList.add('hide')
+  }
 })
 
 // Retrieve saved data from chrome.storage and populate form inputs
@@ -19,13 +31,11 @@ function populateInput(data, addCredLink = false) {
   chrome.storage.sync.get([data]).then(e => {
     if (Object.keys(e[data]).length > 5) {
       const num = Object.keys(e[data]).length - 5
-      console.log('num', num)
       for (let i = 0; i < num; i++) {
         addColumn()
       }
     }
     if (Object.keys(e).length !== 0) {
-      console.log('obj from storage', e[data])
       const keys = Object.keys(e[data])
       keys.forEach((element) => {
         const input = document.getElementById(`${element}`)
@@ -47,20 +57,9 @@ logIn.addEventListener('click', () => {
   chrome.runtime.sendMessage({ text: "Login Request from popup.js" }, function (response) {
     console.log(response)
     logIn.classList.add('hide')
+    credsSection.classList.remove('hide')
   })
 })
-
-// Show section for user to enter spreadsheet ID and sheet name
-function showCredsSection() {
-  const credsSection = document.getElementById('spreadsheet-creds')
-  credsSection.classList.remove('hide')
-}
-
-// Show form for user to select columns for spreadsheet
-function showCustomForm() {
-  const form = document.getElementById('form')
-  form.classList.remove('hide')
-}
 
 // Add a custom column to the spreadsheet form
 function addColumn() {
@@ -97,7 +96,7 @@ function displaySuccessMsg(id) {
   function deleteMsg() {
     msg.remove()
   }
-  setTimeout(deleteMsg, 2000)
+  setTimeout(deleteMsg, 2800)
 }
 
 // Creates a link to the user's spreadsheet
@@ -117,6 +116,7 @@ function storeSpreadsheetCreds() {
     displaySuccessMsg('spreadsheet-creds-form')
   })
   generateLink(credsObj['spreadsheet-id'])
+  form.classList.remove('hide')
 }
 
 // Store user's custom spreadsheet columns as obj in chrome.storage
@@ -149,6 +149,7 @@ function createNewSpreadsheet() {
         document.getElementById('sheet-name').value = 'Sheet1'
         storeSpreadsheetCreds()
         generateLink(res.spreadsheetId)
+        form.classList.remove('hide')
       })
   })
 }
