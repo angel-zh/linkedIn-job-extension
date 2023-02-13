@@ -1,13 +1,12 @@
 html {
-    border-width: 3px;
-    border-style: solid;
-    border-image: linear-gradient(to bottom, #0d5bba, #2b7ada, #fff) 1;
+    background-image: linear-gradient(to bottom, #2b7ada, #4f54e2, #4d37db);
 }
 
 body {
     text-align: center;
     width: 300px;
     height: auto;
+    background-color: white;
 }
 
 .heading h1 {
@@ -32,6 +31,10 @@ body {
 
 #description {
     margin: 5px 0;
+}
+
+label {
+    color: #0d5bba;
 }
 
 #spreadsheet-creds {
@@ -84,6 +87,7 @@ body {
 .tooltiptext p {
     overflow-wrap: break-word;
     margin: 3px 5px;
+    color: black;
 }
 
 #create-sheet-btn {
@@ -115,17 +119,13 @@ body {
 
 #form {
     margin: 15px 0;
-}
-
-fieldset {
-    background-color: white;
-    color: #0d5bba;
-    border: 1px solid #0d5bba;
+    border-top: 7px solid #586be9;
+    border-radius: 2px;
 }
 
 legend {
     font-weight: 500;
-    color: black;
+    margin-top: 5px;
 }
 
 .col {
@@ -170,6 +170,7 @@ legend {
 .highlight {
     font-weight: bold;
     color: #1b9659;
+    padding-bottom: 4px;
 }
 
 .hide {
