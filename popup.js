@@ -124,7 +124,7 @@ function storeFormData() {
   const formObj = Object.fromEntries(formData)
   chrome.storage.sync.set({ 'formObj': formObj }).then(() => {
     console.log('stored form')
-    displaySuccessMsg('fieldset')
+    displaySuccessMsg('form')
   })
 }
 
