@@ -19,7 +19,7 @@ chrome.runtime.onMessage.addListener(
 
             let isLoggedIn = token ? true : false
             chrome.storage.sync.set({ 'isLoggedIn': isLoggedIn }).then(() => {
-                console.log(`User is logged in? ${isLoggedIn}`)
+                console.log('isLoggedIn', isLoggedIn)
               })
         })
         // As per this stackoverflow thread - https://stackoverflow.com/questions/20077487/chrome-extension-message-passing-response-not-sent
