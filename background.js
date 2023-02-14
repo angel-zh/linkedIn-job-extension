@@ -1,14 +1,13 @@
-// chrome.tabs.onUpdated.addListener(
-//     function(tabId, changeInfo, tab) {
-//       if (changeInfo.url) {
-//         chrome.tabs.sendMessage( tabId, {
-//           message: 'hello!',
-//           url: changeInfo.url
-//         })
-//       }
-//     console.log('changed', changeInfo.url)
-//     }
-//   );
+chrome.tabs.onUpdated.addListener(
+    function(tabId, changeInfo, tab) {
+        if (changeInfo.status === 'complete' && tab.url.match('https:\/\/.*.linkedin.com\/.*')) {
+            chrome.tabs.sendMessage(tabId, {
+                url: tab.url,
+                type: 'URL_CHANGE'
+            });
+        }
+    }
+  );
 
 chrome.runtime.onMessage.addListener(
     function (msg, sender, sendResponse) {
