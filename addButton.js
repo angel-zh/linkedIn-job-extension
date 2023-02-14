@@ -3,7 +3,7 @@ let requestUrl = ""
 
 chrome.runtime.onMessage.addListener((obj, sender, response) => {
     console.log('received', obj)
-    if (obj.type === 'URL_CHANGE' && 
+    if (obj.type === 'URL_CHANGE' &&
         (obj.url.startsWith('https://www.linkedin.com/jobs/search/') || obj.url.startsWith('https://www.linkedin.com/jobs/collections/'))
     ) {
         console.log('correct url')
@@ -11,7 +11,6 @@ chrome.runtime.onMessage.addListener((obj, sender, response) => {
     }
 });
 
-// window.addEventListener("load", runChecks, false)
 
 function runChecks() {
     console.log('runChecks running')
@@ -19,8 +18,8 @@ function runChecks() {
 
     function checkForButton() {
         console.log('checkForButton RUN')
-        if 
-        (
+        if
+            (
             document.querySelector('.jobs-unified-top-card__content--two-pane') &&
             !document.querySelector('.add-button')
         ) {
@@ -47,7 +46,7 @@ function getJobTitle() {
 }
 
 function getCompany() {
-    return document.querySelector('.jobs-unified-top-card__company-name > a').innerText
+    return document.querySelector('.jobs-unified-top-card__company-name').innerText
 }
 
 function getLocation() {
@@ -77,7 +76,7 @@ function getRequestUrl() {
     chrome.storage.sync.get(['credsObj']).then(res => {
         const spreadsheetId = res.credsObj['spreadsheet-id']
         const sheetName = res.credsObj['sheet-name']
-        return requestUrl = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/'${sheetName}'!A1:append?valueInputOption=USER_ENTERED`
+        return requestUrl = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/'${sheetName}'!A2:append?insertDataOption=INSERT_ROWS&valueInputOption=USER_ENTERED`
     })
 }
 
@@ -120,7 +119,7 @@ async function sendToSpreadsheet() {
 
 function afterDOMLoaded() {
     const topCard = document.querySelector('.jobs-unified-top-card__content--two-pane')
-    const buttonsContainer = topCard.querySelectorAll( '.display-flex:not(.ivm-view-attr__img-wrapper)' )[0]
+    const buttonsContainer = topCard.querySelectorAll('.display-flex:not(.ivm-view-attr__img-wrapper)')[0]
     const addButton = document.createElement('button')
 
     addButton.setAttribute('class', 'artdeco-button artdeco-button--3 artdeco-button--secondary add-button')
