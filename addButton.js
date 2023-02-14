@@ -1,24 +1,35 @@
 let userToken = ""
 let requestUrl = ""
-// chrome.runtime.onMessage.addListener(
-//     function (request, sender, sendResponse) {
-//         // listen for messages sent from background.js
-//         if (request.message === 'hello!') {
-//             console.log(request.url) // new url is now in content scripts!
-//             runChecks()
-//         }
-//     })
 
-window.addEventListener("load", runChecks, false)
+chrome.runtime.onMessage.addListener((obj, sender, response) => {
+    console.log('received', obj)
+    if (obj.type === 'URL_CHANGE' && 
+        (obj.url.startsWith('https://www.linkedin.com/jobs/search/') || obj.url.startsWith('https://www.linkedin.com/jobs/collections/'))
+    ) {
+        console.log('correct url')
+        runChecks()
+    }
+});
+
+// window.addEventListener("load", runChecks, false)
 
 function runChecks() {
+    console.log('runChecks running')
     let timer = setInterval(checkForButton, 200)
 
     function checkForButton() {
-        if (document.querySelector('.jobs-unified-top-card__content--two-pane')) {
-            console.log('done loading')
+        console.log('checkForButton RUN')
+        if 
+        (
+            document.querySelector('.jobs-unified-top-card__content--two-pane') &&
+            !document.querySelector('.add-button')
+        ) {
+            console.log('done loading. No button found. Generating Button')
             clearInterval(timer)
             afterDOMLoaded()
+        } else if (document.querySelector('.add-button')) {
+            console.log('Button found. Clearing timer')
+            clearInterval(timer)
         }
     }
 }
@@ -88,7 +99,7 @@ async function sendToSpreadsheet() {
                     case 'Link':
                         return getUrl()
                     default:
-                        return 'empty'
+                        return null
                 }
             })
             console.log('mappedvalues=', mappedValues)
@@ -109,7 +120,7 @@ async function sendToSpreadsheet() {
 
 function afterDOMLoaded() {
     const topCard = document.querySelector('.jobs-unified-top-card__content--two-pane')
-    const buttonsContainer = topCard.querySelector('.display-flex')
+    const buttonsContainer = topCard.querySelectorAll( '.display-flex:not(.ivm-view-attr__img-wrapper)' )[0]
     const addButton = document.createElement('button')
 
     addButton.setAttribute('class', 'artdeco-button artdeco-button--3 artdeco-button--secondary add-button')
