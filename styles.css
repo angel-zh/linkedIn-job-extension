@@ -90,20 +90,6 @@ label {
     color: black;
 }
 
-#create-sheet-btn {
-    font-size: 0.8rem;
-    color: #0d5bba;
-    border: 1px solid #e7f2ff;
-    background-color: #e7f2ff;
-    margin: 10px 0;
-    border-radius: 5px;
-}
-
-#create-sheet-btn:hover {
-    border-color: #97b4ee;
-    color: #4991e9;
-}
-
 #link {
     width: 300px;
     overflow-wrap: break-word;
@@ -123,22 +109,28 @@ label {
     border-radius: 2px;
 }
 
+#form p {
+    margin: 5px 0;
+}
+
 legend {
     font-weight: 500;
     margin-top: 5px;
+    font-size: 0.8rem;
+    color: #0d5bba;
 }
 
 .col {
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 .button {
     border: 1px solid #0d5bba;
     border-radius: 13px;
-    padding: 5px 10px;
+    padding: 3px 10px;
     color: #0d5bba;
     background-color: white;
-    margin: 10px 0;
+    margin-top: 8px;
 }
 
 .remove-btn {
@@ -157,6 +149,20 @@ legend {
 
 .button:hover {
     background-color: #e7f2ff;
+}
+
+.button-style-2 {
+    font-size: 0.8rem;
+    color: #0d5bba;
+    border: 1px solid #e7f2ff;
+    background-color: #e7f2ff;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+.button-style-2:hover {
+    border-color: #97b4ee;
+    color: #4991e9;
 }
 
 #submit-btn:hover, #save-btn:hover {
