@@ -4,6 +4,7 @@ const submitButton = document.getElementById('submit-btn')
 const addColumnButton = document.getElementById('add-column-btn')
 const saveButton = document.getElementById('save-btn')
 const createSheetButton = document.getElementById('create-sheet-btn')
+const updateTitlesButton = document.getElementById('update-titles-btn')
 const customColumns = document.querySelector('.custom-columns')
 
 const credsSection = document.getElementById('spreadsheet-creds')
@@ -85,9 +86,9 @@ function removeColumn() {
 }
 
 // Display message on successful submit 
-function displaySuccessMsg(id) {
+function displaySuccessMsg(id, str) {
   const msg = document.createElement('div')
-  msg.innerText = 'Success!'
+  msg.innerText = str
   msg.setAttribute('class', 'highlight')
   document.getElementById(id).appendChild(msg)
 
@@ -111,7 +112,7 @@ function storeSpreadsheetCreds() {
   const credsObj = Object.fromEntries(credsData)
   chrome.storage.sync.set({ 'credsObj': credsObj }).then(() => {
     console.log('stored creds')
-    displaySuccessMsg('spreadsheet-creds-form')
+    displaySuccessMsg('spreadsheet-creds-form', 'Success')
   })
   generateLink(credsObj['spreadsheet-id'])
   form.classList.remove('hide')
@@ -124,7 +125,7 @@ function storeFormData() {
   const formObj = Object.fromEntries(formData)
   chrome.storage.sync.set({ 'formObj': formObj }).then(() => {
     console.log('stored form')
-    displaySuccessMsg('form')
+    displaySuccessMsg('form', 'Saved')
   })
 }
 
@@ -180,7 +181,10 @@ async function sendColTitles() {
           body: JSON.stringify({ "values": [values] })
         })
           .then(res => res.json())
-          .then(res => console.log(res))
+          .then(res => {
+            console.log(res)
+            displaySuccessMsg('form', 'Updated')
+          })
           .catch(err => console.log(err))
       }
     })
@@ -206,11 +210,15 @@ addColumnButton.addEventListener('click', event => {
 saveButton.addEventListener('click', event => {
   event.preventDefault()
   storeFormData()
-  getRequestUrl()
-  sendColTitles()
 })
 
 createSheetButton.addEventListener('click', event => {
   event.preventDefault()
   confirmAction()
+})
+
+updateTitlesButton.addEventListener('click', event => {
+  event.preventDefault()
+  getRequestUrl()
+  sendColTitles()
 })
