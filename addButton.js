@@ -1,6 +1,7 @@
 let userToken = ""
 let requestUrl = ""
 
+// Receives message from background script, and runs check for button addition when url matches
 chrome.runtime.onMessage.addListener((obj, sender, response) => {
     console.log('received', obj)
     if (obj.type === 'URL_CHANGE' &&
@@ -9,9 +10,10 @@ chrome.runtime.onMessage.addListener((obj, sender, response) => {
         console.log('correct url')
         runChecks()
     }
-});
+})
 
-
+// Set up timer to check page for the add-button
+// Add button if not found, and remove timer when button found
 function runChecks() {
     console.log('runChecks running')
     let timer = setInterval(checkForButton, 200)
@@ -25,7 +27,7 @@ function runChecks() {
         ) {
             console.log('done loading. No button found. Generating Button')
             clearInterval(timer)
-            afterDOMLoaded()
+            generateButton()
         } else if (document.querySelector('.add-button')) {
             console.log('Button found. Clearing timer')
             clearInterval(timer)
@@ -33,6 +35,7 @@ function runChecks() {
     }
 }
 
+// Message background script to get auth token
 function getUserToken() {
     chrome.runtime.sendMessage({ text: "Token Request from addButton.js" }, function (response) {
         console.log("Response:", response)
@@ -41,6 +44,7 @@ function getUserToken() {
     })
 }
 
+// Functions to get corresponding text from linkedin jobs page
 function getJobTitle() {
     return document.querySelector('.jobs-unified-top-card__job-title').innerText
 }
@@ -72,6 +76,7 @@ function getUrl() {
     return `https://www.linkedin.com/jobs/view/${jobId}`
 }
 
+// Generate request url using stored data in chrome storage
 function getRequestUrl() {
     chrome.storage.sync.get(['credsObj']).then(res => {
         const spreadsheetId = res.credsObj['spreadsheet-id']
@@ -80,6 +85,7 @@ function getRequestUrl() {
     })
 }
 
+// Generate and send values to google sheet
 async function sendToSpreadsheet() {
     chrome.storage.sync.get(['formObj']).then(e => {
         if (Object.keys(e).length !== 0) {
@@ -117,7 +123,8 @@ async function sendToSpreadsheet() {
     })
 }
 
-function afterDOMLoaded() {
+// Generate add-button and add event listener
+function generateButton() {
     const topCard = document.querySelector('.jobs-unified-top-card__content--two-pane')
     const buttonsContainer = topCard.querySelectorAll('.display-flex:not(.ivm-view-attr__img-wrapper)')[0]
     const addButton = document.createElement('button')
