@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "LinkedIn Jobs to Spreadsheet",
+    "name": "AddedIn",
     "version": "0.1.0",
     "description": "Click on a button to add jobs to spreadsheet",
     "action": {
