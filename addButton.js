@@ -71,9 +71,9 @@ function getToday() {
 }
 
 function getUrl() {
-    const url = window.location.href
-    const jobId = url.split('?')[1].split('=')[1].split('&')[0]
-    return `https://www.linkedin.com/jobs/view/${jobId}`
+    return document.querySelector('.jobs-unified-top-card__content--two-pane > a').href
+    // const jobId = url.split('?')[1].split('=')[1].split('&')[0]
+    // return `https://www.linkedin.com${a}`
 }
 
 // Generate request url using stored data in chrome storage
