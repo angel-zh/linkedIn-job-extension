@@ -72,8 +72,6 @@ function getToday() {
 
 function getUrl() {
     return document.querySelector('.jobs-unified-top-card__content--two-pane > a').href
-    // const jobId = url.split('?')[1].split('=')[1].split('&')[0]
-    // return `https://www.linkedin.com${a}`
 }
 
 // Generate request url using stored data in chrome storage
@@ -83,6 +81,22 @@ function getRequestUrl() {
         const sheetName = res.credsObj['sheet-name']
         return requestUrl = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/'${sheetName}'!A2:append?insertDataOption=INSERT_ROWS&valueInputOption=USER_ENTERED`
     })
+}
+
+// Display success when data is added to spreadsheet
+function displaySuccess() {
+    const topCard = document.querySelector('.jobs-unified-top-card__content--two-pane')
+    const buttonsContainer = topCard.querySelectorAll('.display-flex:not(.ivm-view-attr__img-wrapper)')[0]
+    const span = document.createElement('span')
+    span.innerText = '✓'
+    span.style.color = '#1b9659'
+    span.style.fontSize = '3rem'
+    span.style.fontWeight = 'bold'
+    buttonsContainer.appendChild(span)
+    function deleteMsg() {
+        span.remove()
+      }
+    setTimeout(deleteMsg, 3000)
 }
 
 // Generate and send values to google sheet
@@ -117,7 +131,10 @@ async function sendToSpreadsheet() {
                 body: JSON.stringify({ "values": [mappedValues] })
             })
                 .then(res => res.json())
-                .then(res => console.log(res))
+                .then(res => {
+                    console.log(res)
+                    displaySuccess()
+                })
                 .catch(err => console.log(err))
         }
     })
