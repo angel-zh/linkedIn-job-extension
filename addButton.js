@@ -90,7 +90,7 @@ function displaySuccess() {
     const span = document.createElement('span')
     span.innerText = '✓'
     span.style.color = '#1b9659'
-    span.style.fontSize = '3rem'
+    span.style.fontSize = '2.7rem'
     span.style.fontWeight = 'bold'
     buttonsContainer.appendChild(span)
     function deleteMsg() {
