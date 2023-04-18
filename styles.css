@@ -103,8 +103,12 @@ label {
     color: #97b4ee;
 }
 
+#open-ai {
+    margin-top: 5px;
+}
+
 #form {
-    margin: 15px 0;
+    margin: 10px 0;
     border-top: 7px solid #586be9;
     border-radius: 2px;
 }
