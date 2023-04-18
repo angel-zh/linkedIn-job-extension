@@ -14,17 +14,13 @@ chrome.runtime.onMessage.addListener((obj, sender, response) => {
 
 // Set up timer to check page for the add-button
 // Add button if not found, and remove timer when button found
-// Set up timer to check page for the ai-card
-// Add card if not found, and remove card and timer when found, before adding new card - ensured card does not persist through pages
 function runChecks() {
     console.log('runChecks running')
     let timer = setInterval(checkForButton, 200)
-    let aiTimer = setInterval(checkForAiCard, 200)
 
     function checkForButton() {
         console.log('checkForButton RUN')
-        if
-            (
+        if (
             document.querySelector('.jobs-unified-top-card__content--two-pane') &&
             !document.querySelector('.add-button')
         ) {
@@ -36,28 +32,35 @@ function runChecks() {
             clearInterval(timer)
         }
     }
+    // Retrieve checkbox value from chrome.storage to determine if page will use openAI 
+    // If true, set up timer to check page for the ai-card
+    // Add card if not found, and remove card and timer when found, before adding new card - ensured card does not persist through pages
+    chrome.storage.sync.get(['aiCheckbox']).then(result => {
+        if (result.aiCheckbox === true) {
+            let aiTimer = setInterval(checkForAiCard, 200)
+            function checkForAiCard() {
+                console.log('checkForAiCard RUN')
+                if (document.querySelector('#job-details')?.textContent?.length < 100) { return }
 
-    function checkForAiCard() {
-        console.log('checkForAiCard RUN')
-        if (document.querySelector('#job-details')?.textContent?.length < 100) { return }
+                if (
+                    document.querySelector('.jobs-unified-top-card__content--two-pane') &&
+                    !document.querySelector('.ai-card')
+                ) {
+                    console.log('done loading. No Ai card found. Generating')
+                    clearInterval(aiTimer)
+                    generateAiCard()
+                } else if (document.querySelector('.ai-card')) {
+                    console.log('ai-card found. Clearing and recreating it. Clearing timer')
+                    const topCard = document.querySelector('.jobs-unified-top-card__content--two-pane')
 
-        if (
-            document.querySelector('.jobs-unified-top-card__content--two-pane') &&
-            !document.querySelector('.ai-card')
-        ) {
-            console.log('done loading. No Ai card found. Generating')
-            clearInterval(aiTimer)
-            generateAiCard()
-        } else if (document.querySelector('.ai-card')) {
-            console.log('ai-card found. Clearing and recreating it. Clearing timer')
-            const topCard = document.querySelector('.jobs-unified-top-card__content--two-pane')
-
-            const aiCard = document.querySelector('.ai-card')
-            topCard.removeChild(aiCard)
-            generateAiCard()
-            clearInterval(aiTimer)
+                    const aiCard = document.querySelector('.ai-card')
+                    topCard.removeChild(aiCard)
+                    generateAiCard()
+                    clearInterval(aiTimer)
+                }
+            }
         }
-    }
+    })
 }
 
 // Message background script to get auth token
@@ -130,17 +133,17 @@ function displaySuccess() {
     buttonsContainer.appendChild(span)
     function deleteMsg() {
         span.remove()
-      }
+    }
     setTimeout(deleteMsg, 3000)
 }
 
 // Communicates with background.js to get data from GPT3 to populate in the ai card
 async function populateAiCard() {
-    chrome.runtime.sendMessage({ text: "GPT3", data: {jobTitle: getJobTitle(), jobDescription: getJobDetails(), jobID: getJobID()} }, function (response) {
+    chrome.runtime.sendMessage({ text: "GPT3", data: { jobTitle: getJobTitle(), jobDescription: getJobDetails(), jobID: getJobID() } }, function (response) {
         console.log("Response:", response)
         const jobLevelValue = document.querySelector('#job-level-value')
         const jobExplanationValue = document.querySelector('#job-explanation-value')
-    
+
         jobLevelValue.innerText = response.jobLevel
         jobExplanationValue.innerText = response.explanation
     })
@@ -222,7 +225,7 @@ function generateAiCard() {
 
     const jobLevelValue = document.createElement('span')
     jobLevelValue.setAttribute('class', 'pl2')
-    jobLevelValue.innerText = '-'
+    jobLevelValue.innerText = 'Loading...'
     jobLevelValue.setAttribute('id', 'job-level-value');
 
     const jobExplanationText = document.createElement('h3')
@@ -231,7 +234,7 @@ function generateAiCard() {
 
     const jobExplanationValue = document.createElement('span')
     jobExplanationValue.setAttribute('class', 'pl2')
-    jobExplanationValue.innerText = '-'
+    jobExplanationValue.innerText = 'Loading...'
     jobExplanationValue.setAttribute('id', 'job-explanation-value')
 
     aiCard.appendChild(cardTitle)

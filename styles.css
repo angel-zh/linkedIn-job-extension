@@ -95,7 +95,8 @@ label {
     overflow-wrap: break-word;
 }
 
-#link a, #link a:visited {
+#link a,
+#link a:visited {
     color: #3984e0;
 }
 
@@ -108,7 +109,7 @@ label {
 }
 
 #open-ai {
-   margin-top: 5px;
+    margin-top: 5px;
 }
 
 #form {
@@ -173,7 +174,8 @@ legend {
     color: #4991e9;
 }
 
-#submit-btn:hover, #save-btn:hover {
+#submit-btn:hover,
+#save-btn:hover {
     background-color: #044593;
 }
 
