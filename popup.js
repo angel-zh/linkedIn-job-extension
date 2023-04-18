@@ -1,6 +1,7 @@
 const logIn = document.getElementById('log-in')
 const logOut = document.getElementById('log-out')
 const submitButton = document.getElementById('submit-btn')
+const aiCheckbox = document.getElementById('ai-checkbox')
 const addColumnButton = document.getElementById('add-column-btn')
 const saveButton = document.getElementById('save-btn')
 const createSheetButton = document.getElementById('create-sheet-btn')
@@ -29,14 +30,14 @@ chrome.storage.sync.get(["isLoggedIn", "credsObj"]).then(result => {
 function populateInput(data, addLink = false) {
   chrome.storage.sync.get([data]).then(result => {
     if (result !== undefined) {
-      if (Object.keys(result[data]).length > 5) {
-        const num = Object.keys(result[data]).length - 5
+      const keys = Object.keys(result[data])
+      if (keys.length > 5) {
+        const num = keys.length - 5
         for (let i = 0; i < num; i++) {
           addColumn()
         }
       }
-      const keys = Object.keys(result[data])
-      keys.forEach((element) => {
+      keys.forEach(element => {
         const input = document.getElementById(`${element}`)
         input.value = result[data][element]
       })
@@ -47,8 +48,18 @@ function populateInput(data, addLink = false) {
   })
 }
 
+// Retrieve saved checkbox status from chrome.storage
+function populateCheckbox() {
+  chrome.storage.sync.get(['aiCheckbox']).then(result => {
+    if (result.aiCheckbox === true) {
+      aiCheckbox.checked = true
+    }
+  })
+}
+
 populateInput('formObj')
 populateInput('credsObj', true)
+populateCheckbox()
 
 // Log in and retrieve user token by sending message to background.js
 logIn.addEventListener('click', () => {
@@ -102,7 +113,13 @@ function displaySuccessMsg(id, str) {
 function generateLink(id) {
   const link = document.getElementById('link')
   const url = `https://docs.google.com/spreadsheets/d/${id}/edit`
-  link.innerHTML = `<a href=${url} target="blank">${url}</a>`
+  link.innerHTML = `<a href=${url} target="blank">Go to my spreadsheet</a>`
+}
+
+// Handle checkbox toggle and store value in chrome.storage
+function handleCheckbox() {
+  const value = aiCheckbox.checked || null
+  chrome.storage.sync.set({ 'aiCheckbox': value })
 }
 
 // Store user's speadsheet credentials (id and sheet name) as obj in chrome.storage
@@ -200,6 +217,10 @@ function confirmAction() {
 submitButton.addEventListener('click', event => {
   event.preventDefault()
   storeSpreadsheetCreds()
+})
+
+aiCheckbox.addEventListener('click', event => {
+  handleCheckbox()
 })
 
 addColumnButton.addEventListener('click', event => {
