@@ -63,7 +63,7 @@ populateCheckbox()
 
 // Log in and retrieve user token by sending message to background.js
 logIn.addEventListener('click', () => {
-  chrome.runtime.sendMessage({ text: "Login Request from popup.js" }, function (response) {
+  chrome.runtime.sendMessage({ text: 'GET_TOKEN' }, function (response) {
     console.log(response)
     logIn.classList.add('hide')
     credsSection.classList.remove('hide')
