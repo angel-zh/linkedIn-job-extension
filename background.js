@@ -119,7 +119,7 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
 function OpenaiFetchAPI(jobTitle, jobDescription, jobID) {
     console.log(`Calling GPT3, JOB ID= ${jobID}`)
     const url = "https://api.openai.com/v1/chat/completions";
-    const bearer = 'Bearer ' + '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'
+    const bearer = 'Bearer ' + ''
     const messages = [
         { "role": 'system', "content": `Your job is to analyze the job description, determine the job level, and explain to me how you've come to this conclusion. Pick from the following options:\nJunior, Mid, Senior, Senior+.\nAnswer in JSON format with two params "jobLevel" and "explanation"\nThe explanation should be concise and no more than 5 sentences` },
         { "role": 'user', "content": `Job Title: """${jobTitle}"""\nJob Description: """${jobDescription}"""` }]
