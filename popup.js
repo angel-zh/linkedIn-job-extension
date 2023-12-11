@@ -148,7 +148,7 @@ function storeFormData() {
 
 // Creates a new spreadsheet
 function createNewSpreadsheet() {
-  chrome.runtime.sendMessage({ text: "Token Request from popup.js" }, function (response) {
+  chrome.runtime.sendMessage({ text: 'GET_TOKEN' }, function (response) {
     console.log("Response: ", response)
     const userToken = response
 
@@ -181,7 +181,7 @@ function getRequestUrl() {
 
 // Updates the first row of spreadsheet with selected column titles
 async function sendColTitles() {
-  chrome.runtime.sendMessage({ text: "Login Request from popup.js" }, function (response) {
+  chrome.runtime.sendMessage({ text: 'GET_TOKEN' }, function (response) {
     console.log("Response:", response)
     const userToken = response
 
