@@ -133,7 +133,6 @@ function displaySuccess() {
     const span = document.createElement('span')
     span.innerText = '✓'
     span.style.color = '#1b9659'
-    span.style.fontSize = '2.7rem'
     span.style.fontWeight = 'bold'
     buttonsContainer.appendChild(span)
     function deleteMsg() {
@@ -203,7 +202,7 @@ function generateButton() {
     
     addButton.setAttribute('class', 'artdeco-button artdeco-button--3 artdeco-button--secondary add-button');
     addButton.innerText = '+ Add';
-    addButton.style.marginLeft = '9px';
+    addButton.style.marginTop = '10px';
     topCard.appendChild(addButton);
 
     addButton.addEventListener('click', () => {
