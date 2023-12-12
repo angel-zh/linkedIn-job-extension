@@ -198,15 +198,13 @@ async function sendToSpreadsheet() {
 // Generate add-button and add event listener
 function generateButton() {
     const topCard = document.querySelector('.job-details-jobs-unified-top-card__content--two-pane');
-    const lastChildOfTopCard = topCard.lastElementChild;
-    const buttonsContainer = lastChildOfTopCard.querySelector('.display-flex');
 
     const addButton = document.createElement('button');
     
     addButton.setAttribute('class', 'artdeco-button artdeco-button--3 artdeco-button--secondary add-button');
     addButton.innerText = '+ Add';
     addButton.style.marginLeft = '9px';
-    buttonsContainer.appendChild(addButton);
+    topCard.appendChild(addButton);
 
     addButton.addEventListener('click', () => {
         getUserToken();
